@@ -1,0 +1,44 @@
+# Pickleball Discounted Slot Platform: v1 spec
+
+Last updated: 2026-11-04
+
+## Who uses it
+
+- **Visitors (not logged in):** can browse available slots that nobody has booked. They cannot book.
+- **Players:** log in with their email address. They give a phone number once, at sign-up, for verification. They can book, see and cancel their own bookings.
+- **Venue admins (court owners):** each venue has 1 or 2 admins. A venue admin sees only their own venue.
+- **Platform admin (us):** approves new venues and assigns their admins.
+
+## Court owner side
+
+- Sign up and apply with a venue profile (name, address, district, WhatsApp contact). The venue stays **pending** until the platform admin approves it. Pending venues are hidden from players.
+- The platform admin approves the venue and may add a second venue admin (maximum 2 per venue).
+- Add courts by name ("Court 1", "Court 2"). Every new venue starts with a default "Court 1".
+- Weekly timetable: pick a court, date and start/end time, then enter the **normal price** and **discounted price**.
+- The system works out the discount % and **rejects anything outside 20–30%**. Overlapping slots on the same court and slots in the past are also rejected.
+- Edit or cancel a slot. A booked slot can't be edited; it can only be cancelled, which also cancels the player's booking.
+- See who booked each slot (name and phone).
+- Mark a booking as "attended" or "no-show" once the slot has started.
+
+## Player side
+
+- Browse available slots and filter by **region** (Hong Kong Island / Kowloon / New Territories), district, court or venue name, date and time range.
+- Slot detail, then log in (email), then book.
+- **A booking is confirmed straight away** (all slots are ad hoc). The booking code and QR code are emailed to the player.
+- "My bookings" page with a cancel button.
+
+## Rules
+
+- Only one booking per slot, enforced by the database.
+- Free cancellation up to **4 hours** before the start. After that the player can't cancel in the app.
+- Each venue stores both a district and a region. The region is filled in automatically from the district.
+- All times are in Hong Kong time.
+
+## Not in v1
+
+Online payment, ratings, chat, native app.
+
+## Still to set up (later steps)
+
+- **Phone verification by SMS** needs an SMS provider (e.g. Twilio), which costs money per message. Until then the phone number is collected but not verified.
+- **Booking emails with QR codes** need an email-sending service (e.g. Resend, which has a free tier).
