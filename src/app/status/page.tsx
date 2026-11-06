@@ -5,6 +5,23 @@ export const dynamic = "force-dynamic";
 
 type Check = { label: string; ok: boolean; detail: string };
 
+// Turn a low-level network error into a plain-language explanation.
+function explainNetworkError(e: unknown): string {
+  const err = e as Error & { cause?: { code?: string; message?: string } };
+  const code = err.cause?.code ?? "";
+  const raw = `${err.message}${err.cause?.message ? ` (${err.cause.message})` : ""}`;
+  if (code === "ENOTFOUND" || code === "EAI_AGAIN") {
+    return `This Supabase address doesn't exist. The URL probably has a typo: compare it letter by letter with the Project URL in Supabase. [${raw}]`;
+  }
+  if (err.name === "TimeoutError") {
+    return `The address exists but didn't answer within 10 seconds. Check whether the Supabase project is paused or still starting up.`;
+  }
+  if (code === "ECONNREFUSED" || code === "ECONNRESET" || code === "UND_ERR_CONNECT_TIMEOUT") {
+    return `The address exists but didn't answer. Check whether the Supabase project is paused or still starting up. [${raw}]`;
+  }
+  return `Error: ${raw}`;
+}
+
 async function runChecks(): Promise<Check[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -35,6 +52,18 @@ async function runChecks(): Promise<Check[]> {
 
   if (!urlOk || !keyOk) return checks;
 
+  // Plain connection test first, so we can say why it fails.
+  try {
+    await fetch(`${url!.trim().replace(/\/$/, "")}/auth/v1/health`, {
+      headers: { apikey: key!.trim() },
+      cache: "no-store",
+      signal: AbortSignal.timeout(10000),
+    });
+  } catch (e) {
+    checks.push({ label: "Website can reach the database", ok: false, detail: explainNetworkError(e) });
+    return checks;
+  }
+
   try {
     const supabase = createClient(url!.trim(), key!.trim());
     const { count, error } = await supabase
@@ -60,7 +89,7 @@ async function runChecks(): Promise<Check[]> {
     checks.push({
       label: "Website can reach the database",
       ok: false,
-      detail: `Error: ${(e as Error).message}`,
+      detail: explainNetworkError(e),
     });
   }
   return checks;
