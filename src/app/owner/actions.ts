@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { normalizePhone } from "@/lib/phone";
+import { isValidEmail, normalizeInstagram } from "@/lib/venue-links";
 
 export type FormState = { error?: string; notice?: string } | undefined;
 
@@ -79,18 +80,24 @@ export async function applyVenue(_prev: FormState, form: FormData): Promise<Form
   if (!user) redirect("/owner/login");
 
   const fullName = text(form, "full_name");
+  const applicantTitle = text(form, "applicant_title");
   const phone = normalizePhone(text(form, "phone"));
   const venueName = text(form, "venue_name");
   const address = text(form, "address");
   const district = text(form, "district");
   const whatsapp = normalizePhone(text(form, "whatsapp"));
+  const instagram = normalizeInstagram(text(form, "instagram"));
+  const contactEmail = text(form, "contact_email");
 
   if (!fullName) return { error: "Please enter your name." };
+  if (!applicantTitle) return { error: "Please enter your job title, e.g. Owner or Manager." };
   if (!phone) return { error: "Please enter a valid mobile number, e.g. 9123 4567." };
   if (!venueName) return { error: "Please enter the venue name." };
   if (!address) return { error: "Please enter the venue address." };
   if (!district) return { error: "Please choose a district." };
   if (!whatsapp) return { error: "Please enter a valid WhatsApp number for the venue." };
+  if (!instagram) return { error: "Please enter the venue's Instagram account, e.g. @tsuenwanpickle." };
+  if (!isValidEmail(contactEmail)) return { error: "Please enter a valid email address for the venue." };
 
   const { error: profileError } = await supabase
     .from("profiles")
@@ -100,7 +107,15 @@ export async function applyVenue(_prev: FormState, form: FormData): Promise<Form
 
   const { error: venueError } = await supabase
     .from("venues")
-    .insert({ name: venueName, address, district, whatsapp });
+    .insert({
+      name: venueName,
+      address,
+      district,
+      whatsapp,
+      instagram,
+      contact_email: contactEmail,
+      applicant_title: applicantTitle,
+    });
   if (venueError) return { error: `Couldn't submit the venue: ${venueError.message}` };
 
   revalidatePath("/owner");

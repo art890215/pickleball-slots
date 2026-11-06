@@ -16,12 +16,12 @@ select pg_temp.as_user('00000000-0000-0000-0000-0000000000c1'); set role authent
 update profiles set is_platform_admin = true where id = auth.uid();
 \echo '== 2. owner1 applies with venue, tries to self-approve'
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000b1');
-insert into venues (name,address,district,whatsapp,status) values ('Tsuen Wan Pickle','1 Main St','Tsuen Wan','+852 9123 4567','approved') returning name, region, status;
+insert into venues (name,address,district,whatsapp,instagram,contact_email,applicant_title,status) values ('Tsuen Wan Pickle','1 Main St','Tsuen Wan','+852 9123 4567','twpickle','tw@x.com','Owner','approved') returning name, region, status;
 update venues set status='approved';
 select name from courts;
 \echo '== 3. owner3 applies with a different venue; cannot see owner1 venue'
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000b3');
-insert into venues (name,address,district,whatsapp) values ('KT Courts','2 Rd','Kwun Tong','+852 9000 0000');
+insert into venues (name,address,district,whatsapp,instagram,contact_email,applicant_title) values ('KT Courts','2 Rd','Kwun Tong','+852 9000 0000','ktcourts','kt@x.com','Manager');
 select name from venues;
 \echo '== 4. platform admin approves owner1 venue and adds owner2 as 2nd admin, then tries a 3rd'
 reset role; select pg_temp.as_user('00000000-0000-0000-0000-00000000000a'); set role authenticated;

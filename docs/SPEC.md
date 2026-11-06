@@ -11,7 +11,11 @@ Last updated: 2026-11-04
 
 ## Court owner side
 
-- Sign up and apply with a venue profile (name, address, district, WhatsApp contact). The venue stays **pending** until the platform admin approves it. Pending venues are hidden from players.
+- Sign up (name, email, password) and apply with a venue profile. All fields are required:
+  - About the applicant: name, job title (e.g. Owner, Manager), mobile number
+  - About the venue: name, full address, district, WhatsApp number, Instagram account, email address
+  - A Google Maps link is built from the venue name and address, so the owner can check the location before submitting. Players get the same link. (No Google account or API key needed. Google's address autocomplete could be added later, but it needs a Google Cloud account and billing.)
+- The venue stays **pending** until the platform admin approves it. Pending venues are hidden from players.
 - The platform admin approves the venue and may add a second venue admin (maximum 2 per venue).
 - Add courts by name ("Court 1", "Court 2"). Every new venue starts with a default "Court 1".
 - Weekly timetable: pick a court, date and start/end time, then enter the **normal price** and **discounted price**.
