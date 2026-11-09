@@ -14,7 +14,15 @@ export default function Home() {
 
       <div className="rounded-xl border border-black/10 bg-white p-4">
         <h2 className="font-medium">For players</h2>
-        <p className="mt-1 text-sm text-black/70">Browsing and booking slots is coming soon.</p>
+        <p className="mt-1 text-sm text-black/70">
+          Find private pickleball courts across Hong Kong. Discounted slot booking is coming soon.
+        </p>
+        <Link
+          href="/courts"
+          className="mt-3 inline-block rounded-lg bg-emerald-700 px-4 py-2 text-sm font-medium text-white"
+        >
+          Browse courts
+        </Link>
       </div>
 
       <div className="rounded-xl border border-black/10 bg-white p-4">

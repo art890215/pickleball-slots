@@ -45,7 +45,12 @@ const statusText: Record<
   },
 };
 
-export default async function OwnerHomePage() {
+export default async function OwnerHomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ claimed?: string }>;
+}) {
+  const { claimed } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -91,6 +96,12 @@ export default async function OwnerHomePage() {
           </button>
         </form>
       </div>
+
+      {claimed && (
+        <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+          🎉 Your venue is now yours to manage. Thanks for joining!
+        </p>
+      )}
 
       {venues.length === 0 ? (
         <>

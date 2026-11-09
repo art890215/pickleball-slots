@@ -24,6 +24,15 @@ Last updated: 2026-11-04
 - See who booked each slot (name and phone).
 - Mark a booking as "attended" or "no-show" once the slot has started.
 
+## Venue directory and claim links
+
+- We pre-list private pickleball venues ourselves ("unclaimed" listings) from our research (`docs/venues/`). Members-only clubs are excluded.
+- Public **Courts** page (`/courts`): every listed venue with coloured initials (no logos until a venue agrees), address, opening hours, Google Maps, Instagram, WhatsApp and website. Filter by region. Unclaimed venues are labelled "Not taking bookings here yet".
+- Each unclaimed venue gets a private **claim link**. The owner opens it, creates an account (or logs in), confirms their details (name, job title, mobile, venue WhatsApp, Instagram, email), and the venue becomes theirs and is approved straight away.
+- A link works once. Only the platform admin can see claim links.
+- Imported venues that need checking start hidden. The platform admin shows them from the admin page.
+- **Admin page** (`/admin`, platform admin only): approve or reject owner applications, copy or WhatsApp each venue's claim link, and show or hide listings.
+
 ## Player side
 
 - Browse available slots and filter by **region** (Hong Kong Island / Kowloon / New Territories), district, court or venue name, date and time range.

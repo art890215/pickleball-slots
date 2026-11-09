@@ -27,6 +27,10 @@ export default function RootLayout({
             <Link href="/" className="font-semibold text-emerald-700">
               Pickleball Slots HK
             </Link>
+            <nav className="flex gap-4 text-sm">
+              <Link href="/courts">Courts</Link>
+              <Link href="/owner">For owners</Link>
+            </nav>
           </div>
         </header>
         <div className="mx-auto max-w-md px-4 py-6">{children}</div>

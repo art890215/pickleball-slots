@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { normalizePhone } from "@/lib/phone";
-import { isValidEmail, normalizeInstagram } from "@/lib/venue-links";
+import { isValidEmail, normalizeInstagram, safeNext } from "@/lib/venue-links";
 
 export type FormState = { error?: string; notice?: string } | undefined;
 
@@ -17,6 +17,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
   const fullName = text(form, "full_name");
   const email = text(form, "email");
   const password = String(form.get("password") ?? "");
+  const next = safeNext(form.get("next"));
 
   if (!fullName) return { error: "Please enter your name." };
   if (!email) return { error: "Please enter your email." };
@@ -29,7 +30,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     password,
     options: {
       data: { full_name: fullName },
-      emailRedirectTo: `${origin}/auth/callback?next=/owner`,
+      emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
     },
   });
 
@@ -43,13 +44,14 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     return { error: error.message };
   }
 
-  if (data.session) redirect("/owner");
+  if (data.session) redirect(next);
   return { notice: "Almost done! Check your email and tap the confirmation link, then log in." };
 }
 
 export async function logIn(_prev: FormState, form: FormData): Promise<FormState> {
   const email = text(form, "email");
   const password = String(form.get("password") ?? "");
+  const next = safeNext(form.get("next"));
   if (!email || !password) return { error: "Please enter your email and password." };
 
   const supabase = await createClient();
@@ -63,7 +65,7 @@ export async function logIn(_prev: FormState, form: FormData): Promise<FormState
     }
     return { error: error.message };
   }
-  redirect("/owner");
+  redirect(next);
 }
 
 export async function logOut() {
