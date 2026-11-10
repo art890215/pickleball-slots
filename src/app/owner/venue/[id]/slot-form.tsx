@@ -1,8 +1,10 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useActionState, useEffect, useState } from "react";
 import { addSlot } from "./actions";
 import { ErrorBox, NoticeBox, buttonClass, inputClass } from "@/components/ui";
+import { DISCOUNT_RATES, discountedPrice, slotPrice, type PriceRule } from "@/lib/pricing";
 
 type Court = { id: string; name: string };
 
@@ -12,10 +14,7 @@ const DURATIONS = [
   { label: "2 hr", minutes: 120 },
 ];
 
-const START_TIMES = Array.from({ length: 48 }, (_, i) => {
-  const h = String(Math.floor(i / 2)).padStart(2, "0");
-  return `${h}:${i % 2 ? "30" : "00"}`;
-});
+const START_TIMES = Array.from({ length: 48 }, (_, i) => `${String(Math.floor(i / 2)).padStart(2, "0")}:${i % 2 ? "30" : "00"}`);
 
 function endTime(start: string, minutes: number) {
   const [h, m] = start.split(":").map(Number);
@@ -23,61 +22,53 @@ function endTime(start: string, minutes: number) {
   return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
 }
 
-// Price for a given % off, rounded to whole dollars but kept inside the 20–30% band.
-function priceFor(normal: number, pct: number) {
-  const exact = normal * (1 - pct / 100);
-  if (pct === 20) return Math.floor(exact);
-  if (pct === 30) return Math.ceil(exact);
-  return Math.round(exact);
-}
-
 const chip = (active: boolean) =>
-  `rounded-lg border px-3 py-2 text-sm font-medium ${
-    active ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/15 bg-white"
-  }`;
+  `rounded-lg border px-3 py-2 text-sm font-medium ${active ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/15 bg-white"}`;
 
 export function SlotForm({
   venueId,
   date,
   dateLabel,
   courts,
-  lastNormalPrice,
+  rules,
   suggestedStart,
 }: {
   venueId: string;
   date: string;
   dateLabel: string;
   courts: Court[];
-  lastNormalPrice: number | null;
+  rules: PriceRule[];
   suggestedStart: string;
 }) {
   const [state, action, pending] = useActionState(addSlot, undefined);
   const [courtId, setCourtId] = useState(courts[0]?.id ?? "");
   const [start, setStart] = useState(suggestedStart);
   const [duration, setDuration] = useState(60);
-  const [normal, setNormal] = useState(lastNormalPrice ? String(lastNormalPrice) : "");
-  const [discounted, setDiscounted] = useState(
-    lastNormalPrice ? String(priceFor(lastNormalPrice, 25)) : "",
-  );
-  const formRef = useRef<HTMLFormElement>(null);
+  const [rate, setRate] = useState<number | null>(null);
+  const [override, setOverride] = useState<string | null>(null);
 
   // After a successful add, move the start time on so the next slot is one tap away.
   useEffect(() => {
-    if (state?.ok) setStart((s) => endTime(s, duration));
+    if (state?.ok) {
+      setStart((s) => endTime(s, duration));
+      setOverride(null);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
-  const n = Number(normal);
-  const d = Number(discounted);
-  const pct = n > 0 && d > 0 ? (1 - d / n) * 100 : null;
-  const inBand = pct !== null && pct >= 20 - 1e-9 && pct <= 30 + 1e-9;
+  const listPrice = slotPrice(rules, date, start, duration);
+  const normal = override !== null ? Number(override) : listPrice;
+  const discounted = normal && rate ? discountedPrice(normal, rate) : null;
+  const ready = !!courtId && !!normal && normal > 0 && rate !== null;
 
   return (
-    <form ref={formRef} action={action} className="space-y-4">
+    <form action={action} className="space-y-4">
       <input type="hidden" name="venue_id" value={venueId} />
       <input type="hidden" name="date" value={date} />
       <input type="hidden" name="court_id" value={courtId} />
       <input type="hidden" name="duration_minutes" value={duration} />
+      <input type="hidden" name="normal_price" value={normal ?? ""} />
+      <input type="hidden" name="discount_rate" value={rate ?? ""} />
 
       <p className="text-sm text-black/60">
         Adding to <strong className="text-black">{dateLabel}</strong>
@@ -99,12 +90,8 @@ export function SlotForm({
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
           <span className="text-sm font-medium">Start</span>
-          <select name="start" value={start} onChange={(e) => setStart(e.target.value)} className={`${inputClass} mt-1`}>
-            {START_TIMES.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
+          <select value={start} onChange={(e) => { setStart(e.target.value); setOverride(null); }} name="start" className={`${inputClass} mt-1`}>
+            {START_TIMES.map((t) => <option key={t}>{t}</option>)}
           </select>
         </label>
         <div>
@@ -115,86 +102,89 @@ export function SlotForm({
           </p>
         </div>
       </div>
-
       <div className="flex gap-2">
         {DURATIONS.map((x) => (
-          <button type="button" key={x.minutes} onClick={() => setDuration(x.minutes)} className={chip(duration === x.minutes)}>
+          <button type="button" key={x.minutes} onClick={() => { setDuration(x.minutes); setOverride(null); }} className={chip(duration === x.minutes)}>
             {x.label}
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <label className="block">
-          <span className="text-sm font-medium">Normal price</span>
-          <div className="relative mt-1">
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black/50">HK$</span>
-            <input
-              name="normal_price"
-              type="number"
-              inputMode="numeric"
-              min={1}
-              value={normal}
-              onChange={(e) => {
-                setNormal(e.target.value);
-                const v = Number(e.target.value);
-                if (v > 0) setDiscounted(String(priceFor(v, 25)));
-              }}
-              className={`${inputClass} pl-12`}
-              required
-            />
-          </div>
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium">Discounted price</span>
-          <div className="relative mt-1">
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black/50">HK$</span>
-            <input
-              name="discounted_price"
-              type="number"
-              inputMode="numeric"
-              min={1}
-              value={discounted}
-              onChange={(e) => setDiscounted(e.target.value)}
-              className={`${inputClass} pl-12 ${pct !== null && !inBand ? "border-red-500" : ""}`}
-              required
-            />
-          </div>
-        </label>
+      {/* Original price */}
+      <div className="rounded-xl bg-black/[0.03] p-3">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="text-sm font-medium">Original price</span>
+          {override === null ? (
+            <span className="text-lg font-semibold">{listPrice !== null ? `HK$${listPrice}` : "—"}</span>
+          ) : (
+            <div className="relative w-32">
+              <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-black/50">HK$</span>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                autoFocus
+                value={override}
+                onChange={(e) => setOverride(e.target.value)}
+                className="w-full rounded-lg border border-black/20 bg-white py-1.5 pl-10 pr-2 text-right text-base"
+              />
+            </div>
+          )}
+        </div>
+        <p className="mt-1 text-xs text-black/60">
+          {override !== null ? (
+            <>Custom price for this slot only (e.g. a public holiday). </>
+          ) : listPrice !== null ? (
+            <>From your price list. </>
+          ) : rules.length ? (
+            <>This time isn&apos;t in your price list. </>
+          ) : (
+            <>You haven&apos;t set a price list yet. </>
+          )}
+          {override === null ? (
+            <button type="button" onClick={() => setOverride(listPrice ? String(listPrice) : "")} className="text-emerald-700 underline">
+              {listPrice !== null ? "Change for this slot" : "Enter a price"}
+            </button>
+          ) : (
+            <button type="button" onClick={() => setOverride(null)} className="text-emerald-700 underline">
+              Use price list
+            </button>
+          )}
+          {!rules.length && (
+            <>
+              {" · "}
+              <Link href={`/owner/venue/${venueId}/setup`} className="text-emerald-700 underline">Set up price list</Link>
+            </>
+          )}
+        </p>
       </div>
 
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex gap-2">
-          {[20, 25, 30].map((p) => (
-            <button
-              type="button"
-              key={p}
-              disabled={!(n > 0)}
-              onClick={() => setDiscounted(String(priceFor(n, p)))}
-              className="whitespace-nowrap rounded-lg border border-black/15 bg-white px-3 py-1.5 text-sm disabled:opacity-40"
-            >
-              −{p}%
+      {/* Discount */}
+      <div>
+        <p className="mb-1.5 text-sm font-medium">Discount</p>
+        <div className="grid grid-cols-5 gap-1.5">
+          {DISCOUNT_RATES.map((r) => (
+            <button type="button" key={r} onClick={() => setRate(r)} className={`${chip(rate === r)} px-0`} aria-pressed={rate === r}>
+              {r}%
             </button>
           ))}
         </div>
-        {pct !== null && (
-          <span
-            className={`whitespace-nowrap rounded-full px-2.5 py-1 text-sm font-semibold ${
-              inBand ? "bg-emerald-100 text-emerald-900" : "bg-red-100 text-red-800"
-            }`}
-          >
-            {Number.isInteger(Math.round(pct * 10) / 10) ? pct.toFixed(0) : pct.toFixed(1)}% off{inBand ? " ✓" : ""}
-          </span>
-        )}
       </div>
-      {pct !== null && !inBand && (
-        <p className="text-sm text-red-700">The discount must be between 20% and 30%.</p>
+
+      {discounted !== null && normal && (
+        <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5">
+          <span className="text-sm text-emerald-900">Players pay</span>
+          <span>
+            <span className="text-xl font-bold text-emerald-900">HK${discounted}</span>{" "}
+            <span className="text-sm text-black/40 line-through">HK${normal}</span>
+          </span>
+        </div>
       )}
 
       <ErrorBox message={state?.error} />
       <NoticeBox message={state?.ok} />
-      <button disabled={pending || !inBand || !courtId} className={buttonClass}>
-        {pending ? "Adding…" : "Add slot"}
+      <button disabled={pending || !ready} className={buttonClass}>
+        {pending ? "Posting…" : !normal ? "Enter the original price" : rate === null ? "Choose a discount" : "Post slot"}
       </button>
     </form>
   );

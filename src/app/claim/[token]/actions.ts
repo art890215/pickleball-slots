@@ -24,7 +24,7 @@ export async function claimVenue(_prev: FormState, form: FormData): Promise<Form
   if (!isValidEmail(email)) return { error: "Please enter a valid email address for the venue." };
 
   const supabase = await createClient();
-  const { error } = await supabase.rpc("claim_venue", {
+  const { data: venueId, error } = await supabase.rpc("claim_venue", {
     p_token: token,
     p_full_name: fullName,
     p_applicant_title: title,
@@ -34,5 +34,5 @@ export async function claimVenue(_prev: FormState, form: FormData): Promise<Form
     p_contact_email: email,
   });
   if (error) return { error: error.message };
-  redirect("/owner?claimed=1");
+  redirect(`/owner/venue/${venueId}/setup?claimed=1`);
 }

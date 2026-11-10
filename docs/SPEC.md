@@ -22,8 +22,10 @@ Last updated: 2026-11-04
   - Add a slot: pick court, start time (30-minute steps) and length (1, 1.5 or 2 hours; a late slot can finish after midnight), then enter the **normal price** and **discounted price**. Typing the normal price fills in 25% off; one-tap buttons set 20%, 25% or 30%.
   - Booked slots show the player's name, booking code and a WhatsApp button.
   - Courts can be added and renamed.
-- The system works out the discount % and **rejects anything outside 20–30%**. Overlapping slots on the same court and slots in the past are also rejected.
-- Edit or cancel a slot. A booked slot can't be edited; it can only be cancelled, which also cancels the player's booking.
+- **Venue setup** (`/owner/venue/<id>/setup`, shown right after claiming): 1) check and correct venue details (name, address, district, opening hours, WhatsApp, Instagram, email, website); 2) number of courts and their names; 3) **original price list**: rows of days + time range + price per hour (e.g. Mon–Fri 09:00–12:00 HK$250/hr; Sat & Sun 23:00–05:00 HK$200/hr, running past midnight). Rows can't overlap. A weekly chart shows which hours are covered.
+- When posting a slot, the original price fills in from the price list (summed in 30-minute blocks, so a slot crossing a price change is priced correctly). The owner can change it for one slot (e.g. a public holiday).
+- The owner picks a **discount rate: 20%, 25%, 30%, 35% or 40%**. The discounted price is the original price minus the rate, rounded to the dollar. Other rates are rejected by the database. Overlapping slots on the same court and slots in the past are also rejected.
+- Cancel an open slot. **A booked slot can't be edited or cancelled by the owner** (only the platform admin can, in an emergency). It becomes available again only if the player cancels, and the same court and time can't be posted twice.
 - See who booked each slot (name and phone).
 - Mark a booking as "attended" or "no-show" once the slot has started.
 
@@ -47,12 +49,14 @@ Last updated: 2026-11-04
 
 - Only one booking per slot, enforced by the database.
 - Free cancellation up to **4 hours** before the start. After that the player can't cancel in the app.
+- **No commission** at launch.
+- Booking confirmation is emailed to **both the player and the venue**, with a **booking code** to show at the venue (no QR code).
 - Each venue stores both a district and a region. The region is filled in automatically from the district.
 - All times are in Hong Kong time.
 
 ## Not in v1
 
-Online payment, ratings, chat, native app.
+Ratings, chat, native app. (Payment method: to be decided; see notes.)
 
 ## Still to set up (later steps)
 

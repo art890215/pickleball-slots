@@ -28,11 +28,11 @@ reset role; select pg_temp.as_user('00000000-0000-0000-0000-00000000000a'); set 
 update venues set status='approved' where name='Tsuen Wan Pickle' returning status, approved_at is not null as stamped;
 insert into venue_admins select id,'00000000-0000-0000-0000-0000000000b2' from venues where name='Tsuen Wan Pickle';
 insert into venue_admins select id,'00000000-0000-0000-0000-0000000000b3' from venues where name='Tsuen Wan Pickle';
-\echo '== 5. owner2 adds slots: good (25%), too small (10%), too big (40%), overlapping, past'
+\echo '== 5. owner2 adds slots: good (25%), too small (10%), too big (45%), overlapping, past'
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000b2');
 insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price) select id, now()+interval '1 day', now()+interval '1 day 1 hour', 200, 150 from courts limit 1 returning discount_pct;
 insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price) select id, now()+interval '2 day', now()+interval '2 day 1 hour', 200, 180 from courts limit 1;
-insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price) select id, now()+interval '2 day', now()+interval '2 day 1 hour', 200, 120 from courts limit 1;
+insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price) select id, now()+interval '2 day', now()+interval '2 day 1 hour', 200, 110 from courts limit 1;
 insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price) select id, now()+interval '1 day 30 min', now()+interval '1 day 90 min', 200, 150 from courts limit 1;
 insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price) select id, now()-interval '1 hour', now(), 200, 150 from courts limit 1;
 insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price) select id, now()+interval '3 hours', now()+interval '4 hours', 100, 75 from courts limit 1;
@@ -66,7 +66,7 @@ select cancel_booking((select id from bookings limit 1));
 reset role; select pg_temp.as_user('00000000-0000-0000-0000-0000000000c1'); set role authenticated;
 select status, cancelled_by from cancel_booking((select id from bookings where status='confirmed' limit 1));
 select count(*) available from search_available_slots();
-\echo '== 13. owner1 sees both bookings; owner edits booked slot price (expect error); cancels slot via action'
+\echo '== 13. owner1 sees both bookings; owner edits booked slot price (expect error); owner cannot cancel a booked slot (expect error)'
 reset role; select pg_temp.as_user('00000000-0000-0000-0000-0000000000b1'); set role authenticated;
 select player_name, status from bookings order by created_at;
 update slots set discounted_price = 70 where id = (select slot_id from bookings where status='confirmed');

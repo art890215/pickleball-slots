@@ -188,12 +188,20 @@ export default async function OwnerHomePage({
               </a>
               <p className="text-sm text-black/70">{s.note}</p>
               {v.status === "approved" && (
-                <Link
-                  href={`/owner/venue/${v.id}`}
-                  className="block rounded-lg bg-emerald-700 px-4 py-3 text-center font-medium text-white"
-                >
-                  Manage slots →
-                </Link>
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href={`/owner/venue/${v.id}/setup`}
+                    className="rounded-lg border border-black/15 px-3 py-3 text-center text-sm font-medium"
+                  >
+                    Venue setup
+                  </Link>
+                  <Link
+                    href={`/owner/venue/${v.id}`}
+                    className="rounded-lg bg-emerald-700 px-3 py-3 text-center text-sm font-medium text-white"
+                  >
+                    Manage slots →
+                  </Link>
+                </div>
               )}
             </section>
           );

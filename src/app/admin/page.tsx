@@ -114,6 +114,22 @@ export default async function AdminPage() {
       </section>
 
       <section className="space-y-3">
+        <h2 className="font-semibold">Hidden venues to review ({hidden.length})</h2>
+        <p className="text-sm text-black/60">
+          Imported venues that need checking first (see the &ldquo;Please Check&rdquo; column in the venue
+          spreadsheet). Show them once you&apos;ve confirmed the details.
+        </p>
+        {hidden.length === 0 && <p className="text-sm text-black/60">None. All imported venues are showing.</p>}
+        {hidden.map((v) => (
+          <div key={v.id} className="flex items-center gap-3 rounded-xl border border-black/10 bg-white p-3">
+            <VenueBadge name={v.name} size={32} />
+            <span className="min-w-0 flex-1 truncate text-sm">{v.name}</span>
+            <StatusButton id={v.id} status="approved" label="Show on Courts page" className={`${greenBtn} shrink-0`} />
+          </div>
+        ))}
+      </section>
+
+      <section className="space-y-3">
         <h2 className="font-semibold">Claim links ({unclaimed.length})</h2>
         <p className="text-sm text-black/60">
           Send each venue its private link. Once they claim it, the venue is theirs and goes live
@@ -161,20 +177,6 @@ export default async function AdminPage() {
         })}
       </section>
 
-      <section className="space-y-3">
-        <h2 className="font-semibold">Hidden listings ({hidden.length})</h2>
-        <p className="text-sm text-black/60">
-          Imported venues that need checking first (see the &ldquo;Please Check&rdquo; column in the venue
-          spreadsheet). Show them once you&apos;ve confirmed the details.
-        </p>
-        {hidden.map((v) => (
-          <div key={v.id} className="flex items-center gap-3 rounded-xl border border-black/10 bg-white p-3">
-            <VenueBadge name={v.name} size={32} />
-            <span className="min-w-0 flex-1 truncate text-sm">{v.name}</span>
-            <StatusButton id={v.id} status="approved" label="Show" className={smallBtn} />
-          </div>
-        ))}
-      </section>
 
       <p className="text-center text-sm">
         <Link href="/courts" className="text-emerald-700 underline">

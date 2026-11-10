@@ -8,7 +8,6 @@ import { whatsappUrl } from "@/lib/venue-links";
 import { cancelSlot } from "./actions";
 import { SlotForm } from "./slot-form";
 import { CancelSlotButton } from "./cancel-button";
-import { CourtsPanel } from "./courts-panel";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Manage slots | Pickleball Slots HK", robots: { index: false } };
@@ -29,6 +28,7 @@ type Slot = {
   normal_price: number;
   discounted_price: number;
   discount_pct: number;
+  discount_rate: number | null;
   status: "open" | "cancelled";
   bookings: Booking[];
 };
@@ -63,16 +63,11 @@ export default async function VenueSlotsPage({
   const date = isDateString(dateParam) && dateParam >= today && dateParam <= lastDay ? dateParam : today;
   const days = Array.from({ length: DAYS_SHOWN }, (_, i) => addDays(today, i));
 
-  const [{ data: courtRows }, { data: lastSlot }] = await Promise.all([
+  const [{ data: courtRows }, { data: ruleRows }] = await Promise.all([
     supabase.from("courts").select("id, name").eq("venue_id", id).order("name"),
-    supabase
-      .from("slots")
-      .select("normal_price, courts!inner(venue_id)")
-      .eq("courts.venue_id", id)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle(),
+    supabase.from("venue_price_rules").select("days, start_time, end_time, price_per_hour").eq("venue_id", id),
   ]);
+  const rules = (ruleRows ?? []).map((r) => ({ ...r, price_per_hour: Number(r.price_per_hour) }));
   const courts = courtRows ?? [];
   const courtIds = courts.map((c) => c.id);
 
@@ -80,7 +75,7 @@ export default async function VenueSlotsPage({
     ? await supabase
         .from("slots")
         .select(
-          "id, court_id, starts_at, ends_at, normal_price, discounted_price, discount_pct, status, bookings(status, booking_code, player_name, player_phone)",
+          "id, court_id, starts_at, ends_at, normal_price, discounted_price, discount_pct, discount_rate, status, bookings(status, booking_code, player_name, player_phone)",
         )
         .in("court_id", courtIds)
         .gte("starts_at", hkDayStart(today))
@@ -123,6 +118,15 @@ export default async function VenueSlotsPage({
           <h1 className="truncate text-lg font-semibold leading-tight">{venue.name}</h1>
         </div>
       </div>
+
+      {rules.length === 0 && (
+        <Link
+          href={`/owner/venue/${id}/setup`}
+          className="block rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950"
+        >
+          <strong>Finish setting up:</strong> add your courts and original prices so slots are priced automatically →
+        </Link>
+      )}
 
       {/* Day picker */}
       <nav aria-label="Choose a day" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
@@ -194,7 +198,7 @@ export default async function VenueSlotsPage({
                           <p className="text-sm">
                             <span className="font-medium">HK${Number(s.discounted_price)}</span>{" "}
                             <span className="text-black/40 line-through">HK${Number(s.normal_price)}</span>{" "}
-                            <span className="text-emerald-700">{Number(s.discount_pct)}% off</span>
+                            <span className="text-emerald-700">{s.discount_rate ?? Number(s.discount_pct)}% off</span>
                           </p>
                         </div>
                         <span
@@ -225,12 +229,17 @@ export default async function VenueSlotsPage({
                           </a>
                         </div>
                       )}
-                      {!cancelled && (
+                      {!cancelled && !booking && (
                         <form action={cancelSlot} className="mt-2 flex justify-end">
                           <input type="hidden" name="venue_id" value={id} />
                           <input type="hidden" name="slot_id" value={s.id} />
-                          <CancelSlotButton booked={!!booking} />
+                          <CancelSlotButton booked={false} />
                         </form>
+                      )}
+                      {!cancelled && booking && (
+                        <p className="mt-2 text-right text-xs text-black/50">
+                          Booked slots can&apos;t be cancelled. It reopens if the player cancels.
+                        </p>
                       )}
                     </div>
                   );
@@ -251,18 +260,22 @@ export default async function VenueSlotsPage({
             date={date}
             dateLabel={date === today ? `today, ${formatDay(date)}` : formatDay(date)}
             courts={courts}
-            lastNormalPrice={lastSlot ? Number(lastSlot.normal_price) : null}
+            rules={rules}
             suggestedStart={suggestedStart}
           />
         )}
       </section>
 
-      <details className="rounded-2xl border border-black/10 bg-white p-4">
-        <summary className="cursor-pointer font-semibold">Courts ({courts.length})</summary>
-        <div className="mt-3">
-          <CourtsPanel venueId={id} courts={courts} />
-        </div>
-      </details>
+      <Link
+        href={`/owner/venue/${id}/setup`}
+        className="flex items-center justify-between rounded-2xl border border-black/10 bg-white p-4"
+      >
+        <span>
+          <span className="block font-semibold">Venue setup</span>
+          <span className="text-sm text-black/60">Details, {courts.length} court{courts.length === 1 ? "" : "s"}, price list</span>
+        </span>
+        <span className="text-black/40">→</span>
+      </Link>
     </main>
   );
 }
