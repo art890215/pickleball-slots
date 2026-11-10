@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 
-export function CopyButton({ text, label = "Copy link" }: { text: string; label?: string }) {
+export function CopyButton({
+  text,
+  label = "Copy link",
+  className = "rounded-lg border border-black/15 px-3 py-1.5 text-sm",
+}: {
+  text: string;
+  label?: string;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
   return (
     <button
@@ -13,10 +21,10 @@ export function CopyButton({ text, label = "Copy link" }: { text: string; label?
           setCopied(true);
           setTimeout(() => setCopied(false), 2000);
         } catch {
-          window.prompt("Copy this link:", text);
+          window.prompt("Copy:", text);
         }
       }}
-      className="rounded-lg border border-black/15 px-3 py-1.5 text-sm"
+      className={className}
     >
       {copied ? "Copied ✓" : label}
     </button>

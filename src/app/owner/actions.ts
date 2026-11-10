@@ -18,9 +18,12 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
   const email = text(form, "email");
   const password = String(form.get("password") ?? "");
   const next = safeNext(form.get("next"));
+  const askPhone = form.get("ask_phone") === "1";
+  const phone = askPhone ? normalizePhone(text(form, "phone")) : null;
 
   if (!fullName) return { error: "Please enter your name." };
   if (!email) return { error: "Please enter your email." };
+  if (askPhone && !phone) return { error: "Please enter a valid mobile number, e.g. 9123 4567." };
   if (password.length < 8) return { error: "Password must be at least 8 characters." };
 
   const origin = (await headers()).get("origin") ?? "";
@@ -29,7 +32,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     email,
     password,
     options: {
-      data: { full_name: fullName },
+      data: { full_name: fullName, ...(phone ? { phone } : {}) },
       emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
     },
   });

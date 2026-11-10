@@ -40,6 +40,13 @@ Last updated: 2026-11-04
 
 ## Player side
 
+- **Slots** (`/slots`): discounted slots for the next 14 days, filter by day, region and time of day (morning, afternoon, evening, late night).
+- **Slot page** (`/slots/<id>`): time, price, venue, map; payment rules with a tick box; book.
+- **Booking page** (`/bookings/<id>`): payment details with copy buttons, countdown, I've paid, cancel; then status (checking, confirmed with code, cancelled, expired).
+- **My bookings** (`/bookings`): upcoming and past.
+- Players sign up with name, mobile number, email and password.
+
+
 - Browse available slots and filter by **region** (Hong Kong Island / Kowloon / New Territories), district, court or venue name, date and time range.
 - Slot detail, then log in (email), then book.
 - **A booking is confirmed straight away** (all slots are ad hoc). The booking code and QR code are emailed to the player.
@@ -48,9 +55,15 @@ Last updated: 2026-11-04
 ## Rules
 
 - Only one booking per slot, enforced by the database.
-- Free cancellation up to **4 hours** before the start. After that the player can't cancel in the app.
 - **No commission** at launch.
-- Booking confirmation is emailed to **both the player and the venue**, with a **booking code** to show at the venue (no QR code).
+- **Payment: players pay the venue directly** by FPS or PayMe. After booking, the player sees the venue's payment details as text (no payment link), the amount, and their **booking code** to use as the payment reference.
+  - Pay within **1 hour of booking, or before the slot starts if sooner**. Unpaid bookings expire and the slot reopens automatically.
+  - The player taps **"I've paid"**: the timer stops and the venue is emailed to check.
+  - The venue taps **Payment received** (booking confirmed and locked: no refund, no reposting of that court and time) or **Not received** (booking cancelled, slot reopens).
+  - Players can **cancel free of charge before paying**. **Payments are non-refundable.** If the venue has to cancel (emergency, via the platform admin), **the venue refunds in full**.
+  - One unpaid booking at a time per player. Two expired bookings in 7 days pauses booking for 7 days.
+  - Venues add payment details (FPS ID and/or PayMe, account name) in setup. Their slots only show to players once these are set.
+- Emails (booking code, no QR code): payment instructions to the player on booking; "please check payment" to the venue when the player taps I've paid; confirmation to **both** when the venue confirms; a cancellation note to the player if the venue says not received.
 - Each venue stores both a district and a region. The region is filled in automatically from the district.
 - All times are in Hong Kong time.
 

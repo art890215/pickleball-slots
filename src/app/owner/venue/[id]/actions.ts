@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { addDays, hkDateTime, isDateString } from "@/lib/hk-time";
 import { DISCOUNT_RATES, discountedPrice } from "@/lib/pricing";
+import { confirmedEmail, notReceivedEmail, sendEmail } from "@/lib/email";
+import { siteUrl } from "@/lib/site-url";
 
 export type SlotFormState = { error?: string; ok?: string } | undefined;
 
@@ -65,4 +67,77 @@ export async function cancelSlot(form: FormData) {
   const supabase = await createClient();
   await supabase.rpc("cancel_slot", { p_slot_id: slotId });
   revalidatePath(`/owner/venue/${venueId}`);
+}
+
+type BookingRow = {
+  id: string;
+  booking_code: string;
+  player_name: string;
+  player_phone: string;
+  player_email: string | null;
+  slot: {
+    starts_at: string;
+    ends_at: string;
+    discounted_price: number;
+    court: { name: string; venue: { name: string; address: string; contact_email: string | null } };
+  };
+};
+
+async function bookingInfo(bookingId: string) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("bookings")
+    .select(
+      "id, booking_code, player_name, player_phone, player_email, slot:slots(starts_at, ends_at, discounted_price, court:courts(name, venue:venues(name, address, contact_email)))",
+    )
+    .eq("id", bookingId)
+    .single();
+  const b = data as unknown as BookingRow | null;
+  if (!b) return null;
+  const site = await siteUrl();
+  return {
+    playerEmail: b.player_email,
+    venueEmail: b.slot.court.venue.contact_email,
+    info: {
+      code: b.booking_code,
+      venueName: b.slot.court.venue.name,
+      courtName: b.slot.court.name,
+      address: b.slot.court.venue.address,
+      startsAt: b.slot.starts_at,
+      endsAt: b.slot.ends_at,
+      price: Number(b.slot.discounted_price),
+      playerName: b.player_name,
+      playerPhone: b.player_phone,
+      siteUrl: site,
+    },
+  };
+}
+
+export async function confirmPayment(_prev: SlotFormState, form: FormData): Promise<SlotFormState> {
+  const venueId = String(form.get("venue_id") ?? "");
+  const bookingId = String(form.get("booking_id") ?? "");
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("confirm_payment", { p_booking_id: bookingId });
+  if (error) return { error: error.message };
+  const b = await bookingInfo(bookingId);
+  if (b) {
+    await Promise.all([
+      sendEmail({ to: b.playerEmail, ...confirmedEmail(b.info, false), replyTo: b.venueEmail }),
+      sendEmail({ to: b.venueEmail, ...confirmedEmail(b.info, true) }),
+    ]);
+  }
+  revalidatePath(`/owner/venue/${venueId}`);
+  return undefined;
+}
+
+export async function rejectPayment(_prev: SlotFormState, form: FormData): Promise<SlotFormState> {
+  const venueId = String(form.get("venue_id") ?? "");
+  const bookingId = String(form.get("booking_id") ?? "");
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("reject_payment", { p_booking_id: bookingId });
+  if (error) return { error: error.message };
+  const b = await bookingInfo(bookingId);
+  if (b) await sendEmail({ to: b.playerEmail, ...notReceivedEmail(b.info), replyTo: b.venueEmail });
+  revalidatePath(`/owner/venue/${venueId}`);
+  return undefined;
 }

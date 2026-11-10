@@ -122,3 +122,23 @@ export async function savePriceRules(venueId: string, rules: PriceRule[]): Promi
   revalidatePath(`/owner/venue/${venueId}`, "layout");
   return { ok: "Price list saved." };
 }
+
+export async function savePaymentDetails(_prev: SetupState, form: FormData): Promise<SetupState> {
+  const venueId = text(form, "venue_id");
+  const fps = text(form, "fps_id");
+  const payme = text(form, "payme_id");
+  const name = text(form, "account_name");
+  if (!fps && !payme) return { error: "Please enter an FPS ID or a PayMe number (or both)." };
+  if (!name) return { error: "Please enter the account name players will see." };
+  const supabase = await createClient();
+  const { error } = await supabase.from("venue_payment_details").upsert({
+    venue_id: venueId,
+    fps_id: fps || null,
+    payme_id: payme || null,
+    account_name: name,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) return { error: error.message };
+  revalidatePath(`/owner/venue/${venueId}`, "layout");
+  return { ok: "Payment details saved. Players can now book your slots." };
+}

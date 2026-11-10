@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { VenueBadge } from "@/components/venue-badge";
 import { googleMapsUrl, whatsappUrl } from "@/lib/venue-links";
 import { createClaimLink, setVenueStatus } from "./actions";
-import { CopyButton } from "./copy-button";
+import { CopyButton } from "@/components/copy-button";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Admin | Pickleball Slots HK", robots: { index: false } };

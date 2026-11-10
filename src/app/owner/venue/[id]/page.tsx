@@ -8,6 +8,7 @@ import { whatsappUrl } from "@/lib/venue-links";
 import { cancelSlot } from "./actions";
 import { SlotForm } from "./slot-form";
 import { CancelSlotButton } from "./cancel-button";
+import { PaymentButtons } from "./payment-buttons";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Manage slots | Pickleball Slots HK", robots: { index: false } };
@@ -15,7 +16,9 @@ export const metadata: Metadata = { title: "Manage slots | Pickleball Slots HK",
 const DAYS_SHOWN = 14;
 
 type Booking = {
-  status: "confirmed" | "cancelled";
+  id: string;
+  status: "awaiting_payment" | "payment_reported" | "confirmed" | "cancelled" | "expired";
+  payment_due_at: string | null;
   booking_code: string;
   player_name: string;
   player_phone: string;
@@ -32,6 +35,12 @@ type Slot = {
   status: "open" | "cancelled";
   bookings: Booking[];
 };
+
+// A booking holds the slot while it's paid, being checked, or still within its payment deadline.
+function isLive(b: Booking) {
+  if (b.status === "confirmed" || b.status === "payment_reported") return true;
+  return b.status === "awaiting_payment" && !!b.payment_due_at && new Date(b.payment_due_at).getTime() >= Date.now();
+}
 
 export default async function VenueSlotsPage({
   params,
@@ -75,7 +84,7 @@ export default async function VenueSlotsPage({
     ? await supabase
         .from("slots")
         .select(
-          "id, court_id, starts_at, ends_at, normal_price, discounted_price, discount_pct, discount_rate, status, bookings(status, booking_code, player_name, player_phone)",
+          "id, court_id, starts_at, ends_at, normal_price, discounted_price, discount_pct, discount_rate, status, bookings(id, status, payment_due_at, booking_code, player_name, player_phone)",
         )
         .in("court_id", courtIds)
         .gte("starts_at", hkDayStart(today))
@@ -89,7 +98,7 @@ export default async function VenueSlotsPage({
     if (s.status !== "open") continue;
     const d = hkDate(s.starts_at);
     const c = perDay.get(d) ?? { open: 0, booked: 0 };
-    if (s.bookings.some((b) => b.status === "confirmed")) c.booked++;
+    if (s.bookings.some(isLive)) c.booked++;
     else c.open++;
     perDay.set(d, c);
   }
@@ -177,7 +186,8 @@ export default async function VenueSlotsPage({
               {daySlots
                 .filter((s) => s.court_id === court.id)
                 .map((s) => {
-                  const booking = s.bookings.find((b) => b.status === "confirmed");
+                  const booking = s.bookings.find(isLive);
+                  const paid = booking?.status === "confirmed";
                   const cancelled = s.status === "cancelled";
                   return (
                     <div
@@ -210,7 +220,15 @@ export default async function VenueSlotsPage({
                                 : "bg-emerald-100 text-emerald-900"
                           }`}
                         >
-                          {cancelled ? "Cancelled" : booking ? "Booked" : "Open"}
+                          {cancelled
+                            ? "Cancelled"
+                            : !booking
+                              ? "Open"
+                              : paid
+                                ? "Paid ✓"
+                                : booking.status === "payment_reported"
+                                  ? "Says paid: check"
+                                  : `Awaiting payment (until ${hkTime(booking.payment_due_at!)})`}
                         </span>
                       </div>
                       {booking && !cancelled && (
@@ -236,9 +254,16 @@ export default async function VenueSlotsPage({
                           <CancelSlotButton booked={false} />
                         </form>
                       )}
+                      {!cancelled && booking && !paid && (
+                        <PaymentButtons venueId={id} bookingId={booking.id} code={booking.booking_code} reported={booking.status === "payment_reported"} />
+                      )}
                       {!cancelled && booking && (
                         <p className="mt-2 text-right text-xs text-black/50">
-                          Booked slots can&apos;t be cancelled. It reopens if the player cancels.
+                          {paid
+                            ? "Paid and locked: it can't be cancelled or reposted."
+                            : booking.status === "payment_reported"
+                              ? "The payment timer has stopped while you check."
+                              : "Booked slots can't be cancelled. If unpaid by the deadline, it reopens automatically."}
                         </p>
                       )}
                     </div>
