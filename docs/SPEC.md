@@ -18,7 +18,10 @@ Last updated: 2026-11-04
 - The venue stays **pending** until the platform admin approves it. Pending venues are hidden from players.
 - The platform admin approves the venue and may add a second venue admin (maximum 2 per venue).
 - Add courts by name ("Court 1", "Court 2"). Every new venue starts with a default "Court 1".
-- Weekly timetable: pick a court, date and start/end time, then enter the **normal price** and **discounted price**.
+- **Manage slots** screen (`/owner/venue/<id>`): a 14-day day picker (dots show open and booked slots), the chosen day's slots grouped by court, and an "Add a slot" form.
+  - Add a slot: pick court, start time (30-minute steps) and length (1, 1.5 or 2 hours; a late slot can finish after midnight), then enter the **normal price** and **discounted price**. Typing the normal price fills in 25% off; one-tap buttons set 20%, 25% or 30%.
+  - Booked slots show the player's name, booking code and a WhatsApp button.
+  - Courts can be added and renamed.
 - The system works out the discount % and **rejects anything outside 20–30%**. Overlapping slots on the same court and slots in the past are also rejected.
 - Edit or cancel a slot. A booked slot can't be edited; it can only be cancelled, which also cancels the player's booking.
 - See who booked each slot (name and phone).

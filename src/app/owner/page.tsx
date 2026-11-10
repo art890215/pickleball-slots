@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { logOut } from "./actions";
@@ -30,7 +31,7 @@ const statusText: Record<
   },
   approved: {
     label: "Approved",
-    note: "Your venue is live. Adding slots is the next feature we're building.",
+    note: "Your venue is live. Post discounted slots to fill empty court time.",
     className: "bg-emerald-100 text-emerald-900",
   },
   rejected: {
@@ -186,6 +187,14 @@ export default async function OwnerHomePage({
                 📍 Open in Google Maps ↗
               </a>
               <p className="text-sm text-black/70">{s.note}</p>
+              {v.status === "approved" && (
+                <Link
+                  href={`/owner/venue/${v.id}`}
+                  className="block rounded-lg bg-emerald-700 px-4 py-3 text-center font-medium text-white"
+                >
+                  Manage slots →
+                </Link>
+              )}
             </section>
           );
         })
