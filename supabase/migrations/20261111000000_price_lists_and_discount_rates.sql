@@ -9,6 +9,16 @@
 --     It only opens up again if the player cancels.
 -- =====================================================================
 
+-- 0. Checks before starting.
+do $$ begin
+  if to_regclass('public.venue_claims') is null then
+    raise exception 'Please run 20261109000000_unclaimed_venues_and_claims.sql first, then run this file again.';
+  end if;
+  if to_regclass('public.venue_price_rules') is not null then
+    raise exception 'This update has already been run. Nothing to do: go on to the next file (20261112000000_payment_flow.sql).';
+  end if;
+end $$;
+
 -- 1. Discount rates ----------------------------------------------------
 alter table public.slots drop constraint discount_in_band;
 

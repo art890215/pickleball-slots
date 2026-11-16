@@ -19,6 +19,16 @@
 --     last 7 days blocks new bookings for 7 days.
 -- =====================================================================
 
+-- 0. Checks before starting.
+do $$ begin
+  if to_regclass('public.venue_price_rules') is null then
+    raise exception 'Please run 20261111000000_price_lists_and_discount_rates.sql first, then run this file again.';
+  end if;
+  if to_regclass('public.venue_payment_details') is not null then
+    raise exception 'This update has already been run. Nothing to do: go on to the next file (20261116000000_double_booking_safeguards.sql).';
+  end if;
+end $$;
+
 -- 1. Payment details (only the venue, and players with a booking, can see them)
 create table public.venue_payment_details (
   venue_id     uuid primary key references public.venues (id) on delete cascade,
