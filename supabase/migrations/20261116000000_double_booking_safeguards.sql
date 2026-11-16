@@ -11,6 +11,13 @@
 --   * Daily summary data for the morning email (server use only).
 -- =====================================================================
 
+-- 0. This file needs the payment-flow update (20261112000000) first.
+do $$ begin
+  if to_regclass('public.venue_payment_details') is null then
+    raise exception 'Please run 20261112000000_payment_flow.sql first, then run this file again.';
+  end if;
+end $$;
+
 -- 1. 30-minute cut-off ---------------------------------------------------
 create or replace function public.slot_must_be_future() returns trigger
 language plpgsql set search_path = '' as $$
@@ -158,9 +165,10 @@ language sql stable security definer set search_path = '' as $$
 $$;
 
 -- 2. "I've blocked this court" on payment confirmation --------------------
-alter table public.bookings add column court_blocked_confirmed_at timestamptz;
+alter table public.bookings add column if not exists court_blocked_confirmed_at timestamptz;
 
 drop function if exists public.confirm_payment(uuid);
+drop function if exists public.confirm_payment(uuid, boolean);
 create function public.confirm_payment(p_booking_id uuid, p_court_blocked boolean)
 returns public.bookings
 language plpgsql security definer set search_path = '' as $$
@@ -190,7 +198,7 @@ begin
 end $$;
 
 -- 3. "Court not available" ---------------------------------------------------
-create function public.mark_court_unavailable(p_booking_id uuid) returns public.bookings
+create or replace function public.mark_court_unavailable(p_booking_id uuid) returns public.bookings
 language plpgsql security definer set search_path = '' as $$
 declare
   v_booking public.bookings;
@@ -221,7 +229,7 @@ begin
 end $$;
 
 -- A court/time marked unavailable on a booking can't be posted again.
-create function public.block_repost_of_unavailable() returns trigger
+create or replace function public.block_repost_of_unavailable() returns trigger
 language plpgsql set search_path = '' as $$
 begin
   if exists (
@@ -236,6 +244,7 @@ begin
   return new;
 end $$;
 
+drop trigger if exists slots_block_repost_of_unavailable on public.slots;
 create trigger slots_block_repost_of_unavailable
   before insert on public.slots
   for each row execute function public.block_repost_of_unavailable();
@@ -261,6 +270,7 @@ begin
 end $$;
 
 -- 4. Morning summary (called by the server with the service key only) -------
+drop function if exists public.daily_venue_summaries(date);
 create function public.daily_venue_summaries(p_date date)
 returns table (
   venue_id uuid, venue_name text, contact_email text,
