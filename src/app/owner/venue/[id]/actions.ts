@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { addDays, hkDateTime, isDateString } from "@/lib/hk-time";
 import { DISCOUNT_RATES, discountedPrice } from "@/lib/pricing";
-import { confirmedEmail, notReceivedEmail, sendEmail } from "@/lib/email";
+import { confirmedEmail, courtUnavailableEmail, notReceivedEmail, sendEmail } from "@/lib/email";
 import { siteUrl } from "@/lib/site-url";
 
 export type SlotFormState = { error?: string; ok?: string } | undefined;
@@ -15,7 +15,8 @@ function friendly(message: string): string {
   if (/no_overlapping_slots/.test(message)) {
     return "This court already has a slot at that time (if it's booked, it only opens again when the player cancels).";
   }
-  if (/start in the future/.test(message)) return "That time has already passed. Pick a later time.";
+  if (/30 minutes from now/.test(message)) return "Slots must start at least 30 minutes from now (players can't book later than that).";
+  if (/marked not available/.test(message)) return "This court and time was marked not available for a booking, so it can't be posted again.";
   if (/slot_time_order/.test(message)) return "The end time must be after the start time.";
   if (/courts_venue_id_name_key|duplicate key/.test(message)) return "You already have a court with that name.";
   if (/row-level security/.test(message)) return "You don't have permission to change this venue.";
@@ -117,7 +118,10 @@ export async function confirmPayment(_prev: SlotFormState, form: FormData): Prom
   const venueId = String(form.get("venue_id") ?? "");
   const bookingId = String(form.get("booking_id") ?? "");
   const supabase = await createClient();
-  const { error } = await supabase.rpc("confirm_payment", { p_booking_id: bookingId });
+  if (form.get("court_blocked") !== "on") {
+    return { error: "Please tick the box to confirm you've blocked this court in your own booking system." };
+  }
+  const { error } = await supabase.rpc("confirm_payment", { p_booking_id: bookingId, p_court_blocked: true });
   if (error) return { error: error.message };
   const b = await bookingInfo(bookingId);
   if (b) {
@@ -128,6 +132,21 @@ export async function confirmPayment(_prev: SlotFormState, form: FormData): Prom
   }
   revalidatePath(`/owner/venue/${venueId}`);
   return undefined;
+}
+
+// The court was sold elsewhere / isn't available: cancel the booking (refund due if paid).
+export async function markCourtUnavailable(_prev: SlotFormState, form: FormData): Promise<SlotFormState> {
+  const venueId = String(form.get("venue_id") ?? "");
+  const bookingId = String(form.get("booking_id") ?? "");
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .rpc("mark_court_unavailable", { p_booking_id: bookingId })
+    .single<{ refund_due: boolean }>();
+  if (error) return { error: error.message };
+  const b = await bookingInfo(bookingId);
+  if (b) await sendEmail({ to: b.playerEmail, ...courtUnavailableEmail(b.info, !!data?.refund_due), replyTo: b.venueEmail });
+  revalidatePath(`/owner/venue/${venueId}`);
+  return { ok: data?.refund_due ? "Booking cancelled. The player had paid, so please refund them in full." : "Booking cancelled." };
 }
 
 export async function rejectPayment(_prev: SlotFormState, form: FormData): Promise<SlotFormState> {

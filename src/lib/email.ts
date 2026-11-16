@@ -114,3 +114,68 @@ export function notReceivedEmail(b: BookingInfo) {
 ${details(b)}`),
   };
 }
+
+// To the venue, the moment a player books (before they pay).
+export function venueNewBookingEmail(b: BookingInfo, dueAt: string, manageUrl: string) {
+  return {
+    subject: `New booking: ${b.courtName} · ${when(b)} (${b.code})`,
+    html: layout("New booking: please block this court", `
+<p style="background:#fef3c7;border-radius:8px;padding:12px;color:#78350f"><b>Please block ${esc(b.courtName)}, ${esc(when(b))}</b> in your own booking system now, so it isn't sold twice.</p>
+<p>${esc(b.playerName)} has until <b>${hkTime(dueAt)}</b> to pay you <b>HK$${b.price}</b> with reference <b>${esc(b.code)}</b>. If they don't, the booking is released automatically.</p>
+<p>If this court is no longer available, tap <b>Court not available</b> straight away: <a href="${manageUrl}">${manageUrl}</a></p>
+${details(b)}`),
+  };
+}
+
+// To the player, when the venue says the court isn't available after all.
+export function courtUnavailableEmail(b: BookingInfo, refundDue: boolean) {
+  const refund = refundDue
+    ? `<p style="background:#ecfdf5;border-radius:8px;padding:12px"><b>You'll get a full refund of HK$${b.price}.</b> The venue will refund you directly. If you haven't received it within 2 days, please WhatsApp the venue with reference ${esc(b.code)}.</p>`
+    : `<p>You hadn't paid yet, so there's nothing to refund.</p>`;
+  return {
+    subject: `Sorry, your booking was cancelled by the venue (${b.code})`,
+    html: layout("The venue had to cancel your booking", `
+<p>We're sorry: ${esc(b.venueName)} told us ${esc(b.courtName)} isn't available at ${esc(when(b))}, so your booking was cancelled.</p>
+${refund}
+<p><a href="${b.siteUrl}/slots">Find another slot</a></p>
+${details(b)}`),
+  };
+}
+
+export type SummaryRow = {
+  court_name: string;
+  starts_at: string;
+  ends_at: string;
+  discounted_price: number;
+  booking_status: string | null;
+  booking_code: string | null;
+  player_name: string | null;
+  player_phone: string | null;
+};
+
+const SUMMARY_LABEL: Record<string, string> = {
+  confirmed: "✅ Paid",
+  payment_reported: "🟦 Says paid: please check",
+  awaiting_payment: "🟧 Awaiting payment",
+};
+
+// Morning summary of today's posted slots, for one venue.
+export function dailySummaryEmail(venueName: string, date: string, rows: SummaryRow[], manageUrl: string) {
+  const booked = rows.filter((r) => r.booking_status).length;
+  const lines = rows
+    .map((r) => {
+      const status = (r.booking_status && SUMMARY_LABEL[r.booking_status]) || "⬜ Open (not booked)";
+      const who = r.booking_code
+        ? `<br><span style="font-size:12px;color:#374151">${esc(r.player_name ?? "")} · ${esc(r.booking_code)}</span>`
+        : "";
+      return `<tr><td style="padding:6px 8px 6px 0;white-space:nowrap"><b>${hkTime(r.starts_at)}–${hkTime(r.ends_at)}</b></td><td style="padding:6px 8px 6px 0">${esc(r.court_name)}</td><td style="padding:6px 0">${status}${who}</td></tr>`;
+    })
+    .join("");
+  return {
+    subject: `Today on Pickleball Slots HK: ${booked} booked, ${rows.length - booked} open (${formatDay(date)})`,
+    html: layout(`${venueName}: today's slots`, `
+<p>Please check these against your own booking system. <b>Open</b> slots can still be booked until 30 minutes before they start. If one has been sold elsewhere, remove it now.</p>
+<table style="font-size:14px;border-collapse:collapse;width:100%">${lines}</table>
+<p style="margin-top:12px"><a href="${manageUrl}">Open your slots</a></p>`),
+  };
+}

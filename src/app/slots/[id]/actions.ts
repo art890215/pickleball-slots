@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { normalizePhone } from "@/lib/phone";
-import { playerPayNowEmail, sendEmail } from "@/lib/email";
+import { playerPayNowEmail, sendEmail, venueNewBookingEmail } from "@/lib/email";
+import { hkDate } from "@/lib/hk-time";
 import { siteUrl } from "@/lib/site-url";
 
 export type BookState = { error?: string } | undefined;
@@ -34,24 +35,34 @@ export async function bookSlot(_prev: BookState, form: FormData): Promise<BookSt
   ]);
   if (mine && pay) {
     const site = await siteUrl();
-    const mail = playerPayNowEmail(
-      {
-        code: mine.booking_code,
-        venueName: mine.venue_name,
-        courtName: mine.court_name,
-        address: mine.address,
-        startsAt: mine.starts_at,
-        endsAt: mine.ends_at,
-        price: Number(mine.discounted_price),
-        playerName: fullName,
-        playerPhone: phone,
-        siteUrl: site,
-      },
+    const info = {
+      code: mine.booking_code,
+      venueName: mine.venue_name,
+      courtName: mine.court_name,
+      address: mine.address,
+      startsAt: mine.starts_at,
+      endsAt: mine.ends_at,
+      price: Number(mine.discounted_price),
+      playerName: fullName,
+      playerPhone: phone,
+      siteUrl: site,
+    };
+    const playerMail = playerPayNowEmail(
+      info,
       { fps: pay.fps_id, payme: pay.payme_id, name: pay.account_name },
       mine.payment_due_at,
       `${site}/bookings/${booking.id}`,
     );
-    await sendEmail({ to: user.email, ...mail, replyTo: mine.venue_email });
+    // Tell the venue straight away, so they block the court in their own system.
+    const venueMail = venueNewBookingEmail(
+      info,
+      mine.payment_due_at,
+      `${site}/owner/venue/${mine.venue_id}?date=${hkDate(mine.starts_at)}`,
+    );
+    await Promise.all([
+      sendEmail({ to: user.email, ...playerMail, replyTo: mine.venue_email }),
+      sendEmail({ to: mine.venue_email, ...venueMail }),
+    ]);
   }
   redirect(`/bookings/${booking.id}`);
 }

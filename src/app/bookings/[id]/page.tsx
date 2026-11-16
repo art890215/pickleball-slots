@@ -119,6 +119,8 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           <p>
             {b.cancelled_by === "player"
               ? "You cancelled this booking before paying."
+              : b.cancel_reason === "Court not available"
+                ? `Sorry: ${b.venue_name} told us this court isn't available, so the booking was cancelled.`
               : b.cancel_reason === "Payment not received"
                 ? "The venue didn't receive your payment, so the booking was cancelled. If you did pay, please WhatsApp the venue with your booking code and payment screenshot."
                 : "The venue had to cancel this slot."}

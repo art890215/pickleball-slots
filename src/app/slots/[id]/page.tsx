@@ -95,7 +95,14 @@ export default async function SlotPage({ params }: { params: Promise<{ id: strin
 
       {!slot.is_available ? (
         <div className="rounded-2xl border border-black/10 bg-white p-4 text-center">
-          <p className="font-semibold">This slot has just been taken</p>
+          <p className="font-semibold">
+            {new Date(slot.starts_at).getTime() - Date.now() < 30 * 60000
+              ? "Booking has closed for this slot"
+              : "This slot has just been taken"}
+          </p>
+          {new Date(slot.starts_at).getTime() - Date.now() < 30 * 60000 && (
+            <p className="mt-1 text-sm text-black/60">Slots can be booked until 30 minutes before they start.</p>
+          )}
           <Link href="/slots" className="mt-2 inline-block text-sm text-emerald-700 underline">See other slots</Link>
         </div>
       ) : !user ? (

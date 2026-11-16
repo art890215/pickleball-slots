@@ -8,7 +8,7 @@ import { whatsappUrl } from "@/lib/venue-links";
 import { cancelSlot } from "./actions";
 import { SlotForm } from "./slot-form";
 import { CancelSlotButton } from "./cancel-button";
-import { PaymentButtons } from "./payment-buttons";
+import { CourtUnavailableButton, PaymentButtons } from "./payment-buttons";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Manage slots | Pickleball Slots HK", robots: { index: false } };
@@ -19,6 +19,7 @@ type Booking = {
   id: string;
   status: "awaiting_payment" | "payment_reported" | "confirmed" | "cancelled" | "expired";
   payment_due_at: string | null;
+  refund_due: boolean;
   booking_code: string;
   player_name: string;
   player_phone: string;
@@ -84,7 +85,7 @@ export default async function VenueSlotsPage({
     ? await supabase
         .from("slots")
         .select(
-          "id, court_id, starts_at, ends_at, normal_price, discounted_price, discount_pct, discount_rate, status, bookings(id, status, payment_due_at, booking_code, player_name, player_phone)",
+          "id, court_id, starts_at, ends_at, normal_price, discounted_price, discount_pct, discount_rate, status, bookings(id, status, payment_due_at, refund_due, booking_code, player_name, player_phone)",
         )
         .in("court_id", courtIds)
         .gte("starts_at", hkDayStart(today))
@@ -194,7 +195,9 @@ export default async function VenueSlotsPage({
                       key={s.id}
                       className={`rounded-xl border p-3 ${
                         cancelled
-                          ? "border-black/10 bg-black/[0.02] opacity-60"
+                          ? s.bookings.some((x) => x.refund_due)
+                            ? "border-red-200 bg-white"
+                            : "border-black/10 bg-black/[0.02] opacity-60"
                           : booking
                             ? "border-amber-300 bg-amber-50"
                             : "border-black/10 bg-white"
@@ -247,6 +250,17 @@ export default async function VenueSlotsPage({
                           </a>
                         </div>
                       )}
+                      {cancelled &&
+                        s.bookings
+                          .filter((x) => x.refund_due)
+                          .map((x) => (
+                            <p key={x.id} className="mt-2 rounded-lg bg-red-50 px-2 py-1.5 text-xs font-medium text-red-800">
+                              Refund due: please refund {x.player_name} in full (code {x.booking_code}).
+                            </p>
+                          ))}
+                      {!cancelled && !booking && new Date(s.starts_at).getTime() - Date.now() < 30 * 60000 && (
+                        <p className="mt-1 text-xs text-black/50">Booking closed (30 minutes before start).</p>
+                      )}
                       {!cancelled && !booking && (
                         <form action={cancelSlot} className="mt-2 flex justify-end">
                           <input type="hidden" name="venue_id" value={id} />
@@ -258,7 +272,10 @@ export default async function VenueSlotsPage({
                         <PaymentButtons venueId={id} bookingId={booking.id} code={booking.booking_code} reported={booking.status === "payment_reported"} />
                       )}
                       {!cancelled && booking && (
-                        <p className="mt-2 text-right text-xs text-black/50">
+                        <CourtUnavailableButton venueId={id} bookingId={booking.id} paid={paid || booking.status === "payment_reported"} />
+                      )}
+                      {!cancelled && booking && (
+                        <p className="mt-1 text-right text-xs text-black/50">
                           {paid
                             ? "Paid and locked: it can't be cancelled or reposted."
                             : booking.status === "payment_reported"

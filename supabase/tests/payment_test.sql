@@ -8,13 +8,13 @@ insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price,disc
 select c.id, now()+interval '10 days'+(n||' hours')::interval, now()+interval '10 days'+((n+1)||' hours')::interval, 200, 150, 25
 from courts c join venues v on v.id=c.venue_id, generate_series(1,4) n where v.name='Tsuen Wan Pickle' and c.name='Court 1';
 insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price,discount_rate)
-select c.id, now()+interval '30 minutes', now()+interval '90 minutes', 200, 150, 25 from courts c join venues v on v.id=c.venue_id where v.name='Tsuen Wan Pickle' and c.name='Court 1';
+select c.id, now()+interval '45 minutes', now()+interval '105 minutes', 200, 150, 25 from courts c join venues v on v.id=c.venue_id where v.name='Tsuen Wan Pickle' and c.name='Court 1';
 reset role;
 select id as a from slots where starts_at > now()+interval '10 days' order by starts_at limit 1 offset 0 \gset
 select id as b from slots where starts_at > now()+interval '10 days' order by starts_at limit 1 offset 1 \gset
 select id as d from slots where starts_at > now()+interval '10 days' order by starts_at limit 1 offset 2 \gset
 select id as e from slots where starts_at > now()+interval '10 days' order by starts_at limit 1 offset 3 \gset
-select id as soon from slots where starts_at < now()+interval '1 hour' and status='open' limit 1 \gset
+select id as soon from slots where starts_at < now()+interval '50 minutes' and status='open' limit 1 \gset
 \set QUIET off
 \echo '== F1. booking blocked until the venue sets up payment'
 select pg_temp.as_user('00000000-0000-0000-0000-0000000000c1'); set role authenticated;
@@ -52,7 +52,7 @@ select status, paid_reported_at is not null as reported from report_payment(:'bk
 select cancel_booking(:'bk2');
 \echo '== F7. venue confirms; then cannot cancel slot or repost same court/time'
 reset role; select pg_temp.as_user('00000000-0000-0000-0000-0000000000b1'); set role authenticated;
-select status, payment_confirmed_at is not null as confirmed from confirm_payment(:'bk2');
+select status, payment_confirmed_at is not null as confirmed from confirm_payment(:'bk2', true);
 select cancel_slot(:'a');
 insert into slots (court_id,starts_at,ends_at,normal_price,discounted_price,discount_rate) select court_id, starts_at, ends_at, 200, 150, 25 from slots where id=:'a';
 \echo '== F8. p1 books B; venue says not received -> cancelled, B reopens'
@@ -64,7 +64,7 @@ select reject_payment(:'bk3');
 reset role; select pg_temp.as_user('00000000-0000-0000-0000-0000000000b1'); set role authenticated;
 select status, cancel_reason from reject_payment(:'bk3');
 select count(*) filter (where slot_id = :'b') as b_back_in_search from search_available_slots();
-\echo '== F9. slot starting in 30 min: deadline = start time'
+\echo '== F9. slot starting in 45 min: deadline = start time'
 reset role; select pg_temp.as_user('00000000-0000-0000-0000-0000000000c2'); set role authenticated;
 select round(extract(epoch from payment_due_at - now())/60) as due_in_min from book_slot(:'soon');
 \echo '== F10. expiry: deadline passes -> expired + slot reopens; 2 expiries -> 7-day block'

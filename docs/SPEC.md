@@ -38,6 +38,17 @@ Last updated: 2026-11-04
 - Imported venues that need checking start hidden. The platform admin shows them from the admin page.
 - **Admin page** (`/admin`, platform admin only): approve or reject owner applications, copy or WhatsApp each venue's claim link, and show or hide listings.
 
+## Avoiding double booking with the venue's other channels
+
+Within the site, double booking is impossible (database rules). To protect against a venue also selling the same court by WhatsApp, walk-in or another app:
+- **Booking closes 30 minutes before the start**: the slot disappears from the site and late bookings are refused. Slots can't be posted to start within 30 minutes.
+- The venue is **emailed the moment a player books** ("please block this court in your own system").
+- **Payment received** only works after the venue ticks *"I've blocked this court and time in my own booking system"*. This is recorded on the booking.
+- Open slots have a **"Sold elsewhere / remove"** button.
+- **"Court not available?"** on a booked slot cancels the booking for a clash: the player gets an apology email, a **full refund is due** if they had paid (shown on the venue's slot card), and that court and time can't be posted again.
+- **Morning summary email** to each venue (around 8–9am HK time) listing today's slots: open, awaiting payment, says paid, or paid.
+- Planned: venue terms making double-selling the venue's responsibility (full refund), and tracking venue-caused cancellations.
+
 ## Player side
 
 - **Slots** (`/slots`): discounted slots for the next 14 days, filter by day, region and time of day (morning, afternoon, evening, late night).

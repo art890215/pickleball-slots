@@ -26,6 +26,7 @@ export function BookForm({ slotId, price, defaultName, defaultPhone }: { slotId:
           <li>Unpaid bookings are released automatically.</li>
           <li>You can cancel for free <b>before you pay</b>. <b>Payments are non-refundable.</b></li>
           <li>If the venue has to cancel, they refund you in full.</li>
+          <li>Booking closes 30 minutes before the start.</li>
         </ul>
         <label className="mt-2 flex items-start gap-2 font-medium">
           <input type="checkbox" name="agree" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-0.5 h-5 w-5 accent-emerald-700" />
