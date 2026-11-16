@@ -62,7 +62,7 @@ export default async function OwnerHomePage({
     await Promise.all([
       supabase
         .from("profiles")
-        .select("full_name, phone")
+        .select("full_name, phone, is_platform_admin")
         .eq("id", user.id)
         .single(),
       supabase
@@ -97,6 +97,16 @@ export default async function OwnerHomePage({
           </button>
         </form>
       </div>
+
+      {profile?.is_platform_admin && (
+        <Link
+          href="/admin"
+          className="flex items-center justify-between rounded-xl border border-emerald-700 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900"
+        >
+          <span>Platform admin: claim links, approvals, hidden venues</span>
+          <span>Admin page →</span>
+        </Link>
+      )}
 
       {claimed && (
         <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
