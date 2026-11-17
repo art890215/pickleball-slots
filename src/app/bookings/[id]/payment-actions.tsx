@@ -22,7 +22,7 @@ export function Countdown({ dueAt }: { dueAt: string }) {
   const urgent = left < 10 * 60000;
   return (
     <div className={`rounded-xl p-3 text-center ${urgent ? "bg-red-50 text-red-800" : "bg-amber-50 text-amber-900"}`}>
-      <p className="text-xs font-medium uppercase tracking-wide">Pay within</p>
+      <p className="text-xs font-medium">Pay within</p>
       <p className="text-3xl font-bold tabular-nums">
         {m}:{String(s).padStart(2, "0")}
       </p>

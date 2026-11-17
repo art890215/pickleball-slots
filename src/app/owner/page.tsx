@@ -86,7 +86,7 @@ export default async function OwnerHomePage({
     <main className="space-y-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold leading-tight">
+          <h1 className="text-2xl font-bold leading-tight">
             Hi {profile?.full_name ?? "there"}
           </h1>
           <p className="text-sm text-navy-950/60">{user.email}</p>

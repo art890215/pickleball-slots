@@ -57,7 +57,7 @@ export default async function CourtsPage({
   return (
     <main className="space-y-4">
       <div>
-        <h1 className="text-2xl font-extrabold leading-tight">Pickleball courts in Hong Kong</h1>
+        <h1 className="text-2xl font-bold leading-tight">香港匹克球場<span className="mt-0.5 block text-[13px] font-normal text-navy-900/55">Pickleball courts in Hong Kong</span></h1>
         <p className="mt-1 text-sm text-navy-950/70">
           {venues.length} private venues{activeRegion ? ` in ${activeRegion}` : ""}.
         </p>

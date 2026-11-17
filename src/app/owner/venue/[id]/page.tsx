@@ -111,7 +111,7 @@ export default async function VenueSlotsPage({
     return (
       <main className="space-y-3">
         <Link href="/owner" className="text-sm text-navy-700">← Back</Link>
-        <h1 className="font-sans text-xl font-semibold normal-case not-italic">{venue.name}</h1>
+        <h1 className="font-sans text-xl font-semibold normal-case">{venue.name}</h1>
         <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
           You can post slots once your venue is approved.
         </p>
@@ -125,7 +125,7 @@ export default async function VenueSlotsPage({
         <VenueBadge name={venue.name} size={44} />
         <div className="min-w-0">
           <Link href="/owner" className="text-xs text-navy-700">← My venue</Link>
-          <h1 className="truncate font-sans text-lg font-semibold normal-case not-italic leading-tight">{venue.name}</h1>
+          <h1 className="truncate font-sans text-lg font-semibold normal-case leading-tight">{venue.name}</h1>
         </div>
       </div>
 

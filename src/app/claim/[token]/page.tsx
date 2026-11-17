@@ -28,7 +28,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
   if (!claim) {
     return (
       <main className="space-y-3">
-        <h1 className="text-2xl font-extrabold leading-tight">This link isn&apos;t valid</h1>
+        <h1 className="text-2xl font-bold leading-tight">This link isn&apos;t valid</h1>
         <p className="text-sm text-navy-950/70">
           Please check you copied the whole link, or contact us for a new one.
         </p>
@@ -52,7 +52,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
   if (claim.already_used) {
     return (
       <main className="space-y-4">
-        <h1 className="text-2xl font-extrabold leading-tight">This venue has already been claimed</h1>
+        <h1 className="text-2xl font-bold leading-tight">This venue has already been claimed</h1>
         {venueCard}
         <Link href="/owner/login" className="inline-block text-sm font-medium text-navy-700 underline">
           Log in to manage it
@@ -70,7 +70,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
     return (
       <main className="space-y-5">
         <div>
-          <h1 className="text-2xl font-extrabold leading-tight">Claim your venue</h1>
+          <h1 className="text-2xl font-bold leading-tight">Claim your venue</h1>
           <p className="mt-1 text-sm text-navy-950/70">
             Your venue is listed on Pickleball Slots HK. Claim it to manage your listing and post
             discounted slots to fill empty court time.
@@ -104,7 +104,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
   return (
     <main className="space-y-5">
       <div>
-        <h1 className="text-2xl font-extrabold leading-tight">Claim your venue</h1>
+        <h1 className="text-2xl font-bold leading-tight">Claim your venue</h1>
         <p className="mt-1 text-sm text-navy-950/70">Logged in as {user.email}</p>
       </div>
       {venueCard}

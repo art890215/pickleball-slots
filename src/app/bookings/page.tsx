@@ -49,7 +49,7 @@ export default async function MyBookingsPage() {
 
   return (
     <main className="space-y-5">
-      <h1 className="text-2xl font-extrabold leading-tight">My bookings</h1>
+      <h1 className="text-2xl font-bold leading-tight">我的預訂<span className="mt-0.5 block text-[13px] font-normal text-navy-900/55">My bookings</span></h1>
       <section className="space-y-2">
         <h2 className="section-label">Upcoming</h2>
         {upcoming.length === 0 ? (

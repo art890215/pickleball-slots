@@ -56,7 +56,7 @@ export default async function AdminPage() {
   if (!me?.is_platform_admin) {
     return (
       <main className="space-y-2">
-        <h1 className="text-2xl font-extrabold leading-tight">Admins only</h1>
+        <h1 className="text-2xl font-bold leading-tight">Admins only</h1>
         <p className="text-sm text-navy-950/70">This page is for the platform admin.</p>
       </main>
     );
@@ -81,7 +81,7 @@ export default async function AdminPage() {
   return (
     <main className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold leading-tight">Admin</h1>
+        <h1 className="text-2xl font-bold leading-tight">Admin</h1>
         <p className="mt-1 text-sm text-navy-950/70">
           {claimedCount} venues joined · {unclaimed.length} listed but not claimed · {hidden.length} hidden ·{" "}
           {applications.length} waiting for approval

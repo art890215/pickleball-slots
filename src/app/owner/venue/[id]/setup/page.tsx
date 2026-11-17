@@ -70,7 +70,7 @@ export default async function SetupPage({
         <VenueBadge name={venue.name} size={44} />
         <div className="min-w-0">
           <Link href="/owner" className="text-xs text-navy-700">← My venue</Link>
-          <h1 className="truncate font-sans text-lg font-semibold normal-case not-italic leading-tight">Set up {venue.name}</h1>
+          <h1 className="truncate font-sans text-lg font-semibold normal-case leading-tight">Set up {venue.name}</h1>
         </div>
       </div>
 

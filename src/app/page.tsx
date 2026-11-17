@@ -2,84 +2,78 @@ import Image from "next/image";
 import Link from "next/link";
 
 const STEPS = [
-  { n: "1", title: "Pick a slot", text: "Spare court time at 20–40% off, all over Hong Kong." },
-  { n: "2", title: "Pay the venue", text: "By FPS or PayMe within 1 hour, with your booking code." },
-  { n: "3", title: "Play", text: "Show your booking code at the venue." },
+  { n: "1", zh: "揀場", en: "Pick a slot", text: "Spare court time at 20–40% off, all over Hong Kong." },
+  { n: "2", zh: "俾錢場地", en: "Pay the venue", text: "By FPS or PayMe within 1 hour, with your booking code." },
+  { n: "3", zh: "開波", en: "Play", text: "Show your booking code at the venue." },
 ];
 
-const FACTS = ["20–40% off", "FPS / PayMe", "Next 14 days"];
+const FACTS = ["20–40% off 折", "FPS / PayMe", "14 日 Next 14 days"];
 
 export default function Home() {
   return (
-    <main className="space-y-7">
-      <section className="on-dark relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950 p-6 pb-7 text-white shadow-[0_18px_40px_-20px_rgba(0,19,42,0.7)]">
-        {/* lime glow behind the logo */}
-        <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-ball-400/25 blur-3xl" />
-
+    <main className="space-y-5">
+      {/* Full-width navy band with the round logo, like the HKPPT site header */}
+      <section className="on-dark -mx-4 -mt-5 bg-navy-950 px-4 pb-8 pt-7 text-center text-white">
         <Image
-          src="/brand/hkppt-mark-light.png"
-          alt="HKPPT"
-          width={150}
-          height={57}
+          src="/brand/hkppt-logo-light.png"
+          alt="HKPPT: Hong Kong Premier Pickleball Tournament"
+          width={720}
+          height={668}
           priority
-          className="relative h-[46px] w-auto"
+          className="mx-auto h-auto w-[210px]"
         />
-
-        <p className="relative mt-5 text-[11px] font-semibold uppercase tracking-[0.3em] text-ball-400">Hong Kong pickleball</p>
-        <h1 className="relative mt-1.5 font-display text-[2.6rem] font-black italic leading-[0.95] text-white">
-          Play more.
-          <br />
-          <span className="text-ball-400">Pay less.</span>
-        </h1>
-        <p className="relative mt-3 max-w-[17rem] text-[15px] leading-snug text-white/80">
-          Book empty court slots at private venues for 20–40% off.
-        </p>
-
-        <Link
-          href="/slots"
-          className="relative mt-6 flex items-center justify-center gap-2 rounded-xl bg-ball-400 px-4 py-3.5 text-center font-display text-base font-extrabold uppercase italic tracking-wide text-navy-900 shadow-[0_4px_0_0_rgba(0,0,0,0.35)] transition active:translate-y-[2px] active:shadow-none"
-        >
-          Find a discounted slot
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </Link>
-        <Link href="/courts" className="relative mt-3 block text-center text-sm text-white/75 underline underline-offset-4">
-          or browse all courts
-        </Link>
-
-        <ul className="relative mt-5 flex justify-center gap-1.5">
-          {FACTS.map((f) => (
-            <li key={f} className="whitespace-nowrap rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white/85">
-              {f}
-            </li>
-          ))}
-        </ul>
+        <p className="mt-3 text-sm font-semibold tracking-[0.2em] text-ball-400">PICKLEBALL SLOTS HK</p>
+        <h1 className="mt-2 text-[1.75rem] font-bold leading-tight text-white">玩多啲，慳多啲</h1>
+        <p className="mt-1 text-[15px] text-white/65">Play more. Pay less.</p>
       </section>
 
+      {/* Lime banner, the main call to action */}
+      <Link
+        href="/slots"
+        className="block rounded-2xl bg-ball-300 px-4 py-4 text-center text-navy-900 shadow-sm transition active:scale-[0.99]"
+      >
+        <span className="block text-lg font-bold">⚡ 搵折扣場 Find a discounted slot</span>
+        <span className="mt-1 block text-sm font-medium">空置場地 20–40% 折</span>
+        <span className="mt-1 block text-sm font-semibold">睇所有時段 See all slots →</span>
+      </Link>
+
+      <ul className="flex flex-wrap justify-center gap-2">
+        {FACTS.map((f) => (
+          <li key={f} className="whitespace-nowrap rounded-full border border-navy-900/15 bg-white px-3 py-1 text-xs font-semibold text-navy-900">
+            {f}
+          </li>
+        ))}
+      </ul>
+
       <section className="space-y-2.5">
-        <h2 className="section-label">
-          How it works
-        </h2>
+        <h2 className="section-label">📋 使用方法 HOW IT WORKS</h2>
         {STEPS.map((s) => (
-          <div key={s.n} className="flex items-center gap-3.5 rounded-2xl border border-navy-900/10 bg-white p-3.5 shadow-sm">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-900 font-display text-lg font-black italic text-ball-400">
-              {s.n}
-            </span>
+          <div key={s.n} className="flex items-center gap-3.5 rounded-2xl border border-navy-900/10 bg-white p-3.5">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-navy-900 text-base font-bold text-ball-400">{s.n}</span>
             <div>
-              <p className="font-semibold text-navy-900">{s.title}</p>
+              <p className="font-semibold text-navy-900">
+                {s.zh} <span className="font-medium text-navy-900/70">{s.en}</span>
+              </p>
               <p className="text-sm text-navy-950/65">{s.text}</p>
             </div>
           </div>
         ))}
       </section>
 
-      <section className="rounded-2xl border border-navy-900/10 border-l-4 border-l-ball-400 bg-white p-4 shadow-sm">
-        <h2 className="font-display text-lg font-extrabold uppercase italic text-navy-900">Own a court?</h2>
-        <p className="mt-1 text-sm text-navy-950/70">Fill empty court time. Post a slot in seconds; players pay you directly.</p>
+      {/* Cream notice card with an orange edge, like the HKPPT deadline notice */}
+      <section className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-4">
+        <h2 className="text-base font-bold text-amber-900">🏟️ 你係場主？ Own a court?</h2>
+        <p className="mt-1 text-sm text-navy-950/75">
+          將空置時段放上嚟，球友直接俾錢你。
+          <span className="block text-navy-950/55">Fill empty court time. Post a slot in seconds; players pay you directly.</span>
+        </p>
         <div className="mt-3.5 grid grid-cols-2 gap-2">
-          <Link href="/owner/signup" className="rounded-xl bg-navy-900 px-4 py-3 text-center text-sm font-semibold text-white shadow-[0_3px_0_0_var(--color-ball-400)] transition active:translate-y-[2px] active:shadow-none">List your venue</Link>
-          <Link href="/owner/login" className="rounded-xl border border-navy-900/25 px-4 py-3 text-center text-sm font-semibold text-navy-900">Owner log in</Link>
+          <Link href="/owner/signup" className="rounded-xl bg-navy-900 px-3 py-3 text-center text-sm font-semibold text-ball-400 transition active:scale-[0.99]">
+            <span className="block">＋ 登記場地</span><span className="block text-xs font-medium text-white/70">List your venue</span>
+          </Link>
+          <Link href="/owner/login" className="rounded-xl border border-navy-900/25 bg-white px-3 py-3 text-center text-sm font-semibold text-navy-900">
+            <span className="block">場主登入</span><span className="block text-xs font-normal text-navy-900/55">Owner log in</span>
+          </Link>
         </div>
       </section>
     </main>

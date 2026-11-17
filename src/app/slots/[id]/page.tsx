@@ -54,8 +54,8 @@ export default async function SlotPage({ params }: { params: Promise<{ id: strin
       <section className="overflow-hidden rounded-2xl border border-navy-900/10 bg-white shadow-sm">
         <div className="on-dark relative overflow-hidden bg-gradient-to-br from-navy-800 to-navy-950 p-4 text-white">
           <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-ball-400/20 blur-2xl" />
-          <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-ball-400">{formatDay(hkDate(slot.starts_at))}</p>
-          <p className="relative mt-1 font-display text-[2rem] font-black italic leading-none tabular-nums">
+          <p className="relative text-xs font-semibold tracking-[0.18em] text-ball-400">{formatDay(hkDate(slot.starts_at))}</p>
+          <p className="relative mt-1 font-display text-[2rem] font-bold leading-none tabular-nums">
             {hkTime(slot.starts_at)}–{hkTime(slot.ends_at)}
           </p>
           <p className="relative mt-2 text-sm text-white/80">
@@ -65,11 +65,11 @@ export default async function SlotPage({ params }: { params: Promise<{ id: strin
         <div className="flex items-end justify-between p-4">
           <div>
             <p className="text-sm text-navy-950/60">You pay</p>
-            <p className="font-display text-3xl font-black italic leading-tight text-navy-900">HK${price}</p>
+            <p className="font-display text-3xl font-bold leading-tight text-navy-900">HK${price}</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-navy-950/40 line-through">HK${Number(slot.normal_price)}</p>
-            <p className="mt-1 inline-block rounded-md bg-ball-400 px-2.5 py-1 font-display text-sm font-extrabold italic text-navy-900">{rate}% off</p>
+            <p className="mt-1 inline-block rounded-md bg-ball-400 px-2.5 py-1 font-display text-sm font-bold text-navy-900">{rate}% off</p>
           </div>
         </div>
       </section>
@@ -78,7 +78,7 @@ export default async function SlotPage({ params }: { params: Promise<{ id: strin
         <div className="flex gap-3">
           <VenueBadge name={slot.venue_name} size={44} />
           <div className="min-w-0">
-            <h1 className="font-sans text-base font-semibold normal-case not-italic leading-snug">{slot.venue_name}</h1>
+            <h1 className="font-sans text-base font-semibold normal-case leading-snug">{slot.venue_name}</h1>
             <p className="text-sm text-navy-950/60">{slot.address}</p>
             <p className="text-xs text-navy-950/50">{slot.district} · {slot.region}</p>
           </div>
@@ -109,7 +109,7 @@ export default async function SlotPage({ params }: { params: Promise<{ id: strin
       ) : !user ? (
         <section className="space-y-2 rounded-2xl border border-navy-900/10 bg-white p-4">
           <p className="text-sm text-navy-950/70">Log in to book. Your booking code is emailed to you.</p>
-          <Link href={`/signup?next=/slots/${id}`} className="block rounded-xl bg-navy-900 px-4 py-3.5 text-center font-display font-extrabold uppercase italic tracking-wide text-white shadow-[0_3px_0_0_var(--color-ball-400)] transition active:translate-y-[2px] active:shadow-none">
+          <Link href={`/signup?next=/slots/${id}`} className="block rounded-xl bg-navy-900 px-4 py-3.5 text-center font-display font-bold text-ball-400 shadow-sm transition active:scale-[0.99]">
             Create an account to book
           </Link>
           <Link href={`/login?next=/slots/${id}`} className="block rounded-lg border border-navy-900/15 px-4 py-3 text-center font-medium">

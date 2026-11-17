@@ -20,7 +20,7 @@ function LoginInner({ audience }: { audience: Audience }) {
   return (
     <main className="space-y-5">
       <div>
-        <h1 className="text-2xl font-extrabold leading-tight">{audience === "owner" ? "Court owner log in" : "Log in"}</h1>
+        <h1 className="text-2xl font-bold leading-tight">{audience === "owner" ? "Court owner log in" : "Log in"}</h1>
         {audience === "player" && next.startsWith("/slots/") && (
           <p className="mt-1 text-sm text-navy-950/70">Log in to book this slot.</p>
         )}
@@ -62,7 +62,7 @@ function SignUpInner({ audience }: { audience: Audience }) {
   return (
     <main className="space-y-5">
       <div>
-        <h1 className="text-2xl font-extrabold leading-tight">{title}</h1>
+        <h1 className="text-2xl font-bold leading-tight">{title}</h1>
         <p className="mt-1 text-sm text-navy-950/70">{intro}</p>
       </div>
       {state?.notice ? (

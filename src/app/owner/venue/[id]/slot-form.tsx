@@ -175,7 +175,7 @@ export function SlotForm({
         <div className="flex items-center justify-between rounded-xl border border-ball-400 bg-ball-50 px-3 py-2.5">
           <span className="text-sm font-medium text-navy-900">Players pay</span>
           <span>
-            <span className="font-display text-xl font-extrabold italic text-navy-900">HK${discounted}</span>{" "}
+            <span className="font-display text-xl font-bold text-navy-900">HK${discounted}</span>{" "}
             <span className="text-sm text-navy-950/40 line-through">HK${normal}</span>
           </span>
         </div>

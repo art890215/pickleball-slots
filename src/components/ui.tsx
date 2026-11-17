@@ -23,7 +23,7 @@ export const inputClass =
 
 // Main action button: navy with a lime edge, like the ball on the logo.
 export const buttonClass =
-  "w-full rounded-xl bg-navy-900 px-4 py-3.5 font-display text-base font-extrabold uppercase italic tracking-wide text-white shadow-[0_3px_0_0_var(--color-ball-400)] transition active:translate-y-[2px] active:shadow-none disabled:opacity-60";
+  "w-full rounded-xl bg-navy-900 px-4 py-3.5 font-display text-base font-bold text-ball-400 shadow-sm transition active:scale-[0.99] disabled:opacity-60";
 
 export function ErrorBox({ message }: { message?: string | null }) {
   if (!message) return null;

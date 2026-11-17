@@ -69,25 +69,25 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
   return (
     <main className="space-y-4">
       <div>
-        <h1 className="text-[1.65rem] font-extrabold leading-tight">Discounted slots</h1>
+        <h1 className="text-2xl font-bold leading-tight">折扣時段<span className="mt-0.5 block text-[13px] font-normal text-navy-900/55">Discounted slots</span></h1>
         <p className="mt-1 text-sm text-navy-950/65">
-          <span className="rounded bg-ball-400 px-1.5 py-0.5 font-display text-xs font-extrabold italic text-navy-900">{slots.length}</span>{" "}
+          <span className="rounded bg-ball-400 px-1.5 py-0.5 font-display text-xs font-bold text-navy-900">{slots.length}</span>{" "}
           slot{slots.length === 1 ? "" : "s"} at 20–40% off · pay by FPS or PayMe
         </p>
       </div>
 
       {/* Day */}
       <nav aria-label="Day" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-        <Link href={href({ date: undefined })} scroll={false} className={`flex w-14 shrink-0 flex-col items-center justify-center rounded-xl border py-2 font-display text-sm font-extrabold uppercase italic ${!date ? "border-navy-900 bg-navy-900 text-ball-400" : "border-navy-900/10 bg-white text-navy-900"}`}>
-          All
+        <Link href={href({ date: undefined })} scroll={false} className={`flex w-14 shrink-0 flex-col items-center justify-center rounded-xl border py-2 font-display text-sm font-bold ${!date ? "border-navy-900 bg-navy-900 text-ball-400" : "border-navy-900/10 bg-white text-navy-900"}`}>
+          全部
         </Link>
         {Array.from({ length: DAYS_SHOWN }, (_, i) => addDays(today, i)).map((d) => {
           const p = dayParts(d);
           const active = d === date;
           return (
             <Link key={d} href={href({ date: d })} scroll={false} className={`flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 ${active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-900/10 bg-white text-navy-900"}`}>
-              <span className={`text-[10.5px] font-semibold uppercase tracking-wide ${active ? "text-white/75" : "text-navy-950/50"}`}>{d === today ? "Today" : p.weekday}</span>
-              <span className={`font-display text-xl font-extrabold italic leading-tight ${active ? "text-ball-400" : ""}`}>{p.day}</span>
+              <span className={`text-[10.5px] font-semibold ${active ? "text-white/75" : "text-navy-950/50"}`}>{d === today ? "Today" : p.weekday}</span>
+              <span className={`font-display text-xl font-bold leading-tight ${active ? "text-ball-400" : ""}`}>{p.day}</span>
             </Link>
           );
         })}
@@ -95,13 +95,13 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
 
       {/* Region + time */}
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4">
-        <Link href={href({ region: undefined })} scroll={false} className={chip(!region)}>All areas</Link>
+        <Link href={href({ region: undefined })} scroll={false} className={chip(!region)}>全部地區 All areas</Link>
         {REGIONS.map((r) => (
           <Link key={r} href={href({ region: r })} scroll={false} className={chip(region === r)}>{r}</Link>
         ))}
       </div>
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4">
-        <Link href={href({ time: undefined })} scroll={false} className={chip(!time)}>Any time</Link>
+        <Link href={href({ time: undefined })} scroll={false} className={chip(!time)}>任何時間 Any time</Link>
         {TIMES.map((t) => (
           <Link key={t.key} href={href({ time: t.key })} scroll={false} className={chip(time?.key === t.key)}>{t.label}</Link>
         ))}
@@ -111,7 +111,7 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
 
       {slots.length === 0 && !error && (
         <div className="rounded-2xl border border-dashed border-navy-900/20 bg-white/60 p-6 text-center">
-          <p className="font-display text-lg font-extrabold uppercase italic text-navy-900">No slots match</p>
+          <p className="font-display text-lg font-bold text-navy-900">No slots match</p>
           <p className="mt-1 text-sm text-navy-950/65">Try another day or area. Venues post new slots all the time.</p>
           <Link href="/courts" className="mt-3 inline-block text-sm font-semibold text-navy-700 underline underline-offset-4">Browse all courts</Link>
         </div>
@@ -121,7 +121,7 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
         <section key={d} className="space-y-2.5">
           {!date && (
             <h2 className="section-label pt-1">
-              {d === today ? "Today" : formatDay(d)}
+              📅 {d === today ? "今日 Today" : formatDay(d)}
             </h2>
           )}
           {list.map((s) => {
@@ -130,7 +130,7 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
             return (
               <Link key={s.slot_id} href={`/slots/${s.slot_id}`} className="flex items-stretch overflow-hidden rounded-2xl border border-navy-900/10 bg-white shadow-sm transition active:scale-[0.99]">
                 <div className="on-dark flex w-[4.25rem] shrink-0 flex-col items-center justify-center bg-navy-900 px-1 py-3 text-white">
-                  <p className="font-display text-xl font-extrabold italic tabular-nums leading-none">{hkTime(s.starts_at)}</p>
+                  <p className="font-display text-xl font-bold tabular-nums leading-none">{hkTime(s.starts_at)}</p>
                   <p className="mt-1.5 text-[11px] font-semibold text-ball-400">{hours % 1 ? hours.toFixed(1) : hours} hr</p>
                 </div>
                 <div className="flex min-w-0 flex-1 items-center gap-2.5 p-3">
@@ -140,10 +140,10 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
                     <p className="truncate text-xs text-navy-950/60">{s.court_name} · {s.district}</p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className="font-display text-lg font-extrabold italic leading-none text-navy-900">HK${Number(s.discounted_price)}</p>
+                    <p className="font-display text-lg font-bold leading-none text-navy-900">HK${Number(s.discounted_price)}</p>
                     <p className="mt-1.5 flex items-center justify-end gap-1.5 text-xs">
                       <span className="text-navy-950/40 line-through">${Number(s.normal_price)}</span>
-                      <span className="rounded bg-ball-400 px-1.5 py-0.5 font-display text-[11px] font-extrabold italic text-navy-900">−{rate}%</span>
+                      <span className="rounded bg-ball-400 px-1.5 py-0.5 font-display text-[11px] font-bold text-navy-900">−{rate}%</span>
                     </p>
                   </div>
                 </div>
