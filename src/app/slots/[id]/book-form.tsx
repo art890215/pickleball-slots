@@ -29,7 +29,7 @@ export function BookForm({ slotId, price, defaultName, defaultPhone }: { slotId:
           <li>Booking closes 30 minutes before the start.</li>
         </ul>
         <label className="mt-2 flex items-start gap-2 font-medium">
-          <input type="checkbox" name="agree" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-0.5 h-5 w-5 accent-emerald-700" />
+          <input type="checkbox" name="agree" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-0.5 h-5 w-5 accent-navy-900" />
           I agree to these payment rules
         </label>
       </div>

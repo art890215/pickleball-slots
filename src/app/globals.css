@@ -1,11 +1,98 @@
 @import "tailwindcss";
 
+/*
+ * Brand tokens, taken from the HKPPT logo.
+ *   navy-900 = logo navy   (#001f3d)  -> text, buttons, header, nav
+ *   ball-400 = logo lime   (#b6ff05)  -> highlights, discounts, active states
+ *   line     = logo grey   (#cdced0)  -> court lines, dividers
+ * Success states (confirmed, paid) keep Tailwind's emerald/green on purpose.
+ * To re-skin the whole app, change the values here.
+ */
+@theme static {
+  --color-navy-50: #f1f5fa;
+  --color-navy-100: #e1eaf4;
+  --color-navy-200: #c3d3e6;
+  --color-navy-300: #94aecb;
+  --color-navy-400: #5e80a6;
+  --color-navy-500: #35597f;
+  --color-navy-600: #1d4067;
+  --color-navy-700: #0f2f52;
+  --color-navy-800: #082546;
+  --color-navy-900: #001f3d;
+  --color-navy-950: #00132a;
+
+  --color-ball-50: #f7ffdb;
+  --color-ball-100: #edffa8;
+  --color-ball-200: #dfff6b;
+  --color-ball-300: #cfff33;
+  --color-ball-400: #b6ff05;
+  --color-ball-500: #9be000;
+  --color-ball-600: #74aa00;
+  --color-ball-700: #547c00;
+
+  --color-line: #cdced0;
+  --color-court: #f2f5f9;
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-saira);
 }
 
-body {
-  background: #f6f7f5;
-  color: #1a1d1a;
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--color-court);
+    color: var(--color-navy-950);
+  }
+
+  /* Headlines use the sporty italic display face, like the HKPPT wordmark. */
+  h1 {
+    font-family: var(--font-display);
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    color: var(--color-navy-900);
+  }
+
+  ::selection {
+    background: var(--color-ball-400);
+    color: var(--color-navy-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-navy-900);
+    outline-offset: 2px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-ball-400);
+  }
+}
+
+/* Small section label with a lime marker, e.g. "TODAY", "HOW IT WORKS". */
+@utility section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-navy-900) 65%, transparent);
+
+  &::before {
+    content: "";
+    display: block;
+    height: 0.75rem;
+    width: 0.25rem;
+    transform: skewX(-18deg);
+    background: var(--color-ball-400);
+  }
 }

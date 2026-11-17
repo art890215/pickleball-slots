@@ -29,7 +29,7 @@ export function DetailsForm({ venue, districts }: { venue: Venue; districts: { n
       <Field label="Full address">
         <input name="address" defaultValue={venue.address === "Address to be confirmed" ? "" : venue.address} required className={inputClass} />
       </Field>
-      <a href={googleMapsUrl(venue.name, venue.address)} target="_blank" rel="noopener noreferrer" className="-mt-2 inline-block text-sm text-emerald-700 underline">
+      <a href={googleMapsUrl(venue.name, venue.address)} target="_blank" rel="noopener noreferrer" className="-mt-2 inline-block text-sm text-navy-700 underline">
         📍 Check the saved address on Google Maps ↗
       </a>
       <Field label="District">

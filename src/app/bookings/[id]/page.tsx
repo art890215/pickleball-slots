@@ -12,13 +12,13 @@ import { CancelButton, Countdown, PaidButton } from "./payment-actions";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Your booking | Pickleball Slots HK", robots: { index: false } };
 
-const copyBtn = "shrink-0 rounded-lg border border-black/15 bg-white px-2.5 py-1 text-xs font-medium";
+const copyBtn = "shrink-0 rounded-lg border border-navy-900/15 bg-white px-2.5 py-1 text-xs font-medium";
 
 function PayRow({ label, value, copy = value }: { label: string; value: string; copy?: string }) {
   return (
     <div className="flex items-center justify-between gap-3 py-2">
       <div className="min-w-0">
-        <p className="text-xs text-black/50">{label}</p>
+        <p className="text-xs text-navy-950/50">{label}</p>
         <p className="break-all text-lg font-semibold tabular-nums">{value}</p>
       </div>
       <CopyButton text={copy} label="Copy" className={copyBtn} />
@@ -47,15 +47,15 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
     awaiting_payment: { title: "Almost there: please pay the venue", tone: "bg-amber-500" },
     payment_reported: { title: "Waiting for the venue to confirm", tone: "bg-sky-600" },
     confirmed: { title: "Booking confirmed ✓", tone: "bg-emerald-700" },
-    cancelled: { title: "Booking cancelled", tone: "bg-black/50" },
-    expired: { title: "Booking expired", tone: "bg-black/50" },
+    cancelled: { title: "Booking cancelled", tone: "bg-navy-900/50" },
+    expired: { title: "Booking expired", tone: "bg-navy-900/50" },
   };
 
   return (
     <main className="space-y-4">
-      <Link href="/bookings" className="text-sm text-emerald-700">← My bookings</Link>
+      <Link href="/bookings" className="text-sm text-navy-700">← My bookings</Link>
 
-      <section className="overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-2xl border border-navy-900/10 bg-white shadow-sm">
         <div className={`${header[b.status].tone} p-4 text-white`}>
           <p className="font-semibold">{header[b.status].title}</p>
           <p className="mt-1 text-sm text-white/85">
@@ -66,10 +66,10 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           <VenueBadge name={b.venue_name} size={40} />
           <div className="min-w-0 flex-1">
             <p className="font-semibold leading-snug">{b.venue_name}</p>
-            <p className="truncate text-xs text-black/60">{b.address}</p>
+            <p className="truncate text-xs text-navy-950/60">{b.address}</p>
           </div>
           <div className="text-right">
-            <p className="text-xs text-black/50">Booking code</p>
+            <p className="text-xs text-navy-950/50">Booking code</p>
             <p className="font-mono text-lg font-bold tracking-wider">{b.booking_code}</p>
           </div>
         </div>
@@ -78,17 +78,17 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
       {b.status === "awaiting_payment" && pay && (
         <>
           <Countdown dueAt={b.payment_due_at} />
-          <section className="rounded-2xl border border-black/10 bg-white p-4">
+          <section className="rounded-2xl border border-navy-900/10 bg-white p-4">
             <h2 className="font-semibold">Pay the venue</h2>
-            <p className="mt-0.5 text-sm text-black/60">
+            <p className="mt-0.5 text-sm text-navy-950/60">
               Open your banking or PayMe app and send the payment to the details below.
             </p>
-            <div className="mt-2 divide-y divide-black/10">
+            <div className="mt-2 divide-y divide-navy-900/10">
               <PayRow label="Amount" value={`HK$${price}`} copy={String(price)} />
               {pay.fps_id && <PayRow label="FPS ID" value={pay.fps_id} />}
               {pay.payme_id && <PayRow label="PayMe" value={pay.payme_id} />}
               <div className="py-2">
-                <p className="text-xs text-black/50">Account name (check it matches)</p>
+                <p className="text-xs text-navy-950/50">Account name (check it matches)</p>
                 <p className="font-semibold">{pay.account_name}</p>
               </div>
               <PayRow label="Reference: put this in the payment message" value={b.booking_code} />
@@ -115,7 +115,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
       )}
 
       {b.status === "cancelled" && (
-        <section className="rounded-2xl border border-black/10 bg-white p-4 text-sm">
+        <section className="rounded-2xl border border-navy-900/10 bg-white p-4 text-sm">
           <p>
             {b.cancelled_by === "player"
               ? "You cancelled this booking before paying."
@@ -130,16 +130,16 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
       )}
 
       {b.status === "expired" && (
-        <section className="rounded-2xl border border-black/10 bg-white p-4 text-sm">
+        <section className="rounded-2xl border border-navy-900/10 bg-white p-4 text-sm">
           <p>Payment wasn&apos;t confirmed in time, so the slot was released.</p>
-          <Link href="/slots" className="mt-2 inline-block text-emerald-700 underline">Find another slot</Link>
+          <Link href="/slots" className="mt-2 inline-block text-navy-700 underline">Find another slot</Link>
         </section>
       )}
 
       <div className="flex flex-wrap gap-2 text-sm">
-        <a href={googleMapsUrl(b.venue_name, b.address)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-black/15 bg-white px-3 py-1.5">📍 Map</a>
+        <a href={googleMapsUrl(b.venue_name, b.address)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-navy-900/15 bg-white px-3 py-1.5">📍 Map</a>
         {b.venue_whatsapp && (
-          <a href={whatsappUrl(b.venue_whatsapp, `Hi, about my booking ${b.booking_code}`)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-black/15 bg-white px-3 py-1.5">
+          <a href={whatsappUrl(b.venue_whatsapp, `Hi, about my booking ${b.booking_code}`)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-navy-900/15 bg-white px-3 py-1.5">
             WhatsApp venue
           </a>
         )}

@@ -60,7 +60,7 @@ export function CancelButton({ bookingId }: { bookingId: string }) {
     >
       <input type="hidden" name="booking_id" value={bookingId} />
       <ErrorBox message={state?.error} />
-      <button disabled={pending} className="w-full rounded-lg border border-black/15 px-4 py-3 font-medium text-red-700">
+      <button disabled={pending} className="w-full rounded-lg border border-navy-900/15 px-4 py-3 font-medium text-red-700">
         {pending ? "Cancelling…" : "Cancel booking (free, before paying)"}
       </button>
     </form>

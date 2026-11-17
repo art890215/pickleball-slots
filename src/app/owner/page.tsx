@@ -86,13 +86,13 @@ export default async function OwnerHomePage({
     <main className="space-y-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-2xl font-extrabold leading-tight">
             Hi {profile?.full_name ?? "there"}
           </h1>
-          <p className="text-sm text-black/60">{user.email}</p>
+          <p className="text-sm text-navy-950/60">{user.email}</p>
         </div>
         <form action={logOut}>
-          <button className="rounded-lg border border-black/15 px-3 py-1.5 text-sm">
+          <button className="rounded-lg border border-navy-900/15 px-3 py-1.5 text-sm">
             Log out
           </button>
         </form>
@@ -101,7 +101,7 @@ export default async function OwnerHomePage({
       {profile?.is_platform_admin && (
         <Link
           href="/admin"
-          className="flex items-center justify-between rounded-xl border border-emerald-700 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900"
+          className="flex items-center justify-between rounded-xl border border-navy-900 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900"
         >
           <span>Platform admin: claim links, approvals, hidden venues</span>
           <span>Admin page →</span>
@@ -116,7 +116,7 @@ export default async function OwnerHomePage({
 
       {venues.length === 0 ? (
         <>
-          <p className="text-sm text-black/70">
+          <p className="text-sm text-navy-950/70">
             Tell us about your venue. Once we approve it, you can start posting
             discounted slots.
           </p>
@@ -133,7 +133,7 @@ export default async function OwnerHomePage({
           return (
             <section
               key={v.id}
-              className="space-y-3 rounded-xl border border-black/10 bg-white p-4"
+              className="space-y-3 rounded-xl border border-navy-900/10 bg-white p-4"
             >
               <div className="flex items-start justify-between gap-2">
                 <h2 className="font-semibold">{v.name}</h2>
@@ -145,28 +145,28 @@ export default async function OwnerHomePage({
               </div>
               <dl className="space-y-1 text-sm">
                 <div>
-                  <dt className="inline text-black/60">Address: </dt>
+                  <dt className="inline text-navy-950/60">Address: </dt>
                   <dd className="inline">{v.address}</dd>
                 </div>
                 <div>
-                  <dt className="inline text-black/60">District: </dt>
+                  <dt className="inline text-navy-950/60">District: </dt>
                   <dd className="inline">
                     {v.district} ({v.region})
                   </dd>
                 </div>
                 <div>
-                  <dt className="inline text-black/60">WhatsApp: </dt>
+                  <dt className="inline text-navy-950/60">WhatsApp: </dt>
                   <dd className="inline">{v.whatsapp}</dd>
                 </div>
                 {v.instagram && (
                   <div>
-                    <dt className="inline text-black/60">Instagram: </dt>
+                    <dt className="inline text-navy-950/60">Instagram: </dt>
                     <dd className="inline">
                       <a
                         href={instagramUrl(v.instagram)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-emerald-700 underline"
+                        className="text-navy-700 underline"
                       >
                         @{v.instagram}
                       </a>
@@ -175,13 +175,13 @@ export default async function OwnerHomePage({
                 )}
                 {v.contact_email && (
                   <div>
-                    <dt className="inline text-black/60">Email: </dt>
+                    <dt className="inline text-navy-950/60">Email: </dt>
                     <dd className="inline break-all">{v.contact_email}</dd>
                   </div>
                 )}
                 {v.applicant_title && (
                   <div>
-                    <dt className="inline text-black/60">Applied by: </dt>
+                    <dt className="inline text-navy-950/60">Applied by: </dt>
                     <dd className="inline">
                       {profile?.full_name}, {v.applicant_title}
                     </dd>
@@ -192,22 +192,22 @@ export default async function OwnerHomePage({
                 href={googleMapsUrl(v.name, v.address)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-sm font-medium text-emerald-700 underline"
+                className="inline-block text-sm font-medium text-navy-700 underline"
               >
                 📍 Open in Google Maps ↗
               </a>
-              <p className="text-sm text-black/70">{s.note}</p>
+              <p className="text-sm text-navy-950/70">{s.note}</p>
               {v.status === "approved" && (
                 <div className="grid grid-cols-2 gap-2">
                   <Link
                     href={`/owner/venue/${v.id}/setup`}
-                    className="rounded-lg border border-black/15 px-3 py-3 text-center text-sm font-medium"
+                    className="rounded-lg border border-navy-900/15 px-3 py-3 text-center text-sm font-medium"
                   >
                     Venue setup
                   </Link>
                   <Link
                     href={`/owner/venue/${v.id}`}
-                    className="rounded-lg bg-emerald-700 px-3 py-3 text-center text-sm font-medium text-white"
+                    className="rounded-lg bg-navy-900 px-3 py-3 text-center text-sm font-medium text-white"
                   >
                     Manage slots →
                   </Link>

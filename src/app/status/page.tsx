@@ -100,7 +100,7 @@ export default async function StatusPage() {
   const allOk = checks.every((c) => c.ok);
   return (
     <main className="mx-auto max-w-md p-4 font-sans">
-      <h1 className="mb-1 text-xl font-semibold">Setup check</h1>
+      <h1 className="mb-1 text-2xl font-extrabold leading-tight">Setup check</h1>
       <p className="mb-4 text-sm opacity-70">
         {allOk ? "Everything is connected." : "Something needs fixing; see the items below."}
       </p>

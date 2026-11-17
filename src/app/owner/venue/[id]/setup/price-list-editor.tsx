@@ -18,7 +18,7 @@ const TIER_COLORS = ["#bbf7d0", "#86efac", "#4ade80", "#22c55e", "#16a34a", "#15
 type Row = PriceRule & { key: number };
 
 const selectClass =
-  "w-full rounded-lg border border-black/20 bg-white px-2 py-2 text-base outline-none focus:border-emerald-700";
+  "w-full rounded-lg border border-navy-900/20 bg-white px-2 py-2 text-base outline-none focus:border-navy-900";
 
 export function PriceListEditor({ venueId, initial }: { venueId: string; initial: PriceRule[] }) {
   const [rows, setRows] = useState<Row[]>(
@@ -46,11 +46,11 @@ export function PriceListEditor({ venueId, initial }: { venueId: string; initial
       {rows.map((r, i) => {
         const overnight = r.end_time < r.start_time;
         return (
-          <div key={r.key} className="space-y-3 rounded-xl border border-black/10 bg-black/[0.015] p-3">
+          <div key={r.key} className="space-y-3 rounded-xl border border-navy-900/10 bg-navy-900/[0.015] p-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold">
                 Price {i + 1}
-                {r.days.length > 0 && <span className="font-normal text-black/50"> · {describeDays(r.days)}</span>}
+                {r.days.length > 0 && <span className="font-normal text-navy-950/50"> · {describeDays(r.days)}</span>}
               </span>
               {rows.length > 1 && (
                 <button
@@ -73,7 +73,7 @@ export function PriceListEditor({ venueId, initial }: { venueId: string; initial
                     aria-pressed={on}
                     onClick={() => update(r.key, { days: on ? r.days.filter((x) => x !== d) : [...r.days, d] })}
                     className={`h-9 flex-1 rounded-lg border text-xs font-medium ${
-                      on ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/15 bg-white"
+                      on ? "border-navy-900 bg-navy-900 text-white" : "border-navy-900/15 bg-white"
                     }`}
                   >
                     {DAY_SHORT[d]}
@@ -87,7 +87,7 @@ export function PriceListEditor({ venueId, initial }: { venueId: string; initial
                   type="button"
                   key={p.label}
                   onClick={() => update(r.key, { days: p.days })}
-                  className="rounded-full border border-black/15 bg-white px-2.5 py-1 text-xs"
+                  className="rounded-full border border-navy-900/15 bg-white px-2.5 py-1 text-xs"
                 >
                   {p.label}
                 </button>
@@ -96,14 +96,14 @@ export function PriceListEditor({ venueId, initial }: { venueId: string; initial
 
             <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-2">
               <label className="block">
-                <span className="text-xs text-black/60">From</span>
+                <span className="text-xs text-navy-950/60">From</span>
                 <select value={r.start_time} onChange={(e) => update(r.key, { start_time: e.target.value })} className={selectClass}>
                   {TIMES.map((t) => <option key={t}>{t}</option>)}
                 </select>
               </label>
-              <span className="pb-2.5 text-black/40">–</span>
+              <span className="pb-2.5 text-navy-950/40">–</span>
               <label className="block">
-                <span className="text-xs text-black/60">To {overnight && <em className="not-italic text-amber-700">(next day)</em>}</span>
+                <span className="text-xs text-navy-950/60">To {overnight && <em className="not-italic text-amber-700">(next day)</em>}</span>
                 <select value={r.end_time} onChange={(e) => update(r.key, { end_time: e.target.value })} className={selectClass}>
                   {TIMES.map((t) => <option key={t}>{t}</option>)}
                 </select>
@@ -111,9 +111,9 @@ export function PriceListEditor({ venueId, initial }: { venueId: string; initial
             </div>
 
             <label className="block">
-              <span className="text-xs text-black/60">Original price per hour</span>
+              <span className="text-xs text-navy-950/60">Original price per hour</span>
               <div className="relative mt-0.5">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black/50">HK$</span>
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-navy-950/50">HK$</span>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -123,7 +123,7 @@ export function PriceListEditor({ venueId, initial }: { venueId: string; initial
                   placeholder="250"
                   className={`${selectClass} pl-12`}
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-black/40">/ hour</span>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-navy-950/40">/ hour</span>
               </div>
             </label>
           </div>
@@ -138,26 +138,26 @@ export function PriceListEditor({ venueId, initial }: { venueId: string; initial
             { key: Math.max(0, ...rs.map((x) => x.key)) + 1, days: [0, 6], start_time: "09:00", end_time: "18:00", price_per_hour: 0 },
           ])
         }
-        className="w-full rounded-lg border border-dashed border-black/25 py-2.5 text-sm font-medium"
+        className="w-full rounded-lg border border-dashed border-navy-900/25 py-2.5 text-sm font-medium"
       >
         + Add another price
       </button>
 
       {/* Weekly preview */}
-      <div className="rounded-xl border border-black/10 bg-white p-3">
+      <div className="rounded-xl border border-navy-900/10 bg-white p-3">
         <p className="mb-2 text-sm font-semibold">Your week at a glance</p>
         <div className="space-y-1">
           {grid.map(({ day, blocks }) => (
             <div key={day} className="flex items-center gap-2">
-              <span className="w-8 text-xs text-black/60">{DAY_SHORT[day]}</span>
-              <div className="flex h-4 flex-1 overflow-hidden rounded bg-black/[0.06]">
+              <span className="w-8 text-xs text-navy-950/60">{DAY_SHORT[day]}</span>
+              <div className="flex h-4 flex-1 overflow-hidden rounded bg-navy-900/[0.06]">
                 {blocks.map((p, b) => (
                   <div key={b} className="h-full flex-1" style={{ background: colorFor(p) }} title={p ? `HK$${p}/hr` : "No price"} />
                 ))}
               </div>
             </div>
           ))}
-          <div className="ml-10 flex justify-between text-[10px] text-black/40">
+          <div className="ml-10 flex justify-between text-[10px] text-navy-950/40">
             <span>00</span><span>06</span><span>12</span><span>18</span><span>24</span>
           </div>
         </div>
@@ -168,8 +168,8 @@ export function PriceListEditor({ venueId, initial }: { venueId: string; initial
                 <span className="h-2.5 w-2.5 rounded-sm" style={{ background: colorFor(p) }} /> HK${p}/hr
               </span>
             ))}
-            <span className="flex items-center gap-1 text-black/50">
-              <span className="h-2.5 w-2.5 rounded-sm bg-black/[0.06]" /> no price (can&apos;t post)
+            <span className="flex items-center gap-1 text-navy-950/50">
+              <span className="h-2.5 w-2.5 rounded-sm bg-navy-900/[0.06]" /> no price (can&apos;t post)
             </span>
           </div>
         )}

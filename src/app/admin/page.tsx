@@ -32,8 +32,8 @@ function claimOf(v: Venue) {
   return c ?? null;
 }
 
-const smallBtn = "rounded-lg border border-black/15 px-3 py-1.5 text-sm";
-const greenBtn = "rounded-lg bg-emerald-700 px-3 py-1.5 text-sm font-medium text-white";
+const smallBtn = "rounded-lg border border-navy-900/15 px-3 py-1.5 text-sm";
+const greenBtn = "rounded-lg bg-navy-900 px-3 py-1.5 text-sm font-medium text-white";
 
 function StatusButton({ id, status, label, className }: { id: string; status: string; label: string; className: string }) {
   return (
@@ -56,8 +56,8 @@ export default async function AdminPage() {
   if (!me?.is_platform_admin) {
     return (
       <main className="space-y-2">
-        <h1 className="text-xl font-semibold">Admins only</h1>
-        <p className="text-sm text-black/70">This page is for the platform admin.</p>
+        <h1 className="text-2xl font-extrabold leading-tight">Admins only</h1>
+        <p className="text-sm text-navy-950/70">This page is for the platform admin.</p>
       </main>
     );
   }
@@ -81,8 +81,8 @@ export default async function AdminPage() {
   return (
     <main className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Admin</h1>
-        <p className="mt-1 text-sm text-black/70">
+        <h1 className="text-2xl font-extrabold leading-tight">Admin</h1>
+        <p className="mt-1 text-sm text-navy-950/70">
           {claimedCount} venues joined · {unclaimed.length} listed but not claimed · {hidden.length} hidden ·{" "}
           {applications.length} waiting for approval
         </p>
@@ -90,16 +90,16 @@ export default async function AdminPage() {
 
       <section className="space-y-3">
         <h2 className="font-semibold">Owner applications ({applications.length})</h2>
-        {applications.length === 0 && <p className="text-sm text-black/60">None waiting.</p>}
+        {applications.length === 0 && <p className="text-sm text-navy-950/60">None waiting.</p>}
         {applications.map((v) => (
-          <div key={v.id} className="space-y-2 rounded-xl border border-black/10 bg-white p-4">
+          <div key={v.id} className="space-y-2 rounded-xl border border-navy-900/10 bg-white p-4">
             <div className="flex gap-3">
               <VenueBadge name={v.name} size={40} />
               <div className="min-w-0 text-sm">
                 <p className="font-semibold">{v.name}</p>
-                <p className="text-black/60">{v.address} · {v.district}</p>
+                <p className="text-navy-950/60">{v.address} · {v.district}</p>
                 <p>WhatsApp {v.whatsapp} · @{v.instagram} · {v.contact_email}</p>
-                <p className="text-black/60">Applicant title: {v.applicant_title}</p>
+                <p className="text-navy-950/60">Applicant title: {v.applicant_title}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -115,13 +115,13 @@ export default async function AdminPage() {
 
       <section className="space-y-3">
         <h2 className="font-semibold">Hidden venues to review ({hidden.length})</h2>
-        <p className="text-sm text-black/60">
+        <p className="text-sm text-navy-950/60">
           Imported venues that need checking first (see the &ldquo;Please Check&rdquo; column in the venue
           spreadsheet). Show them once you&apos;ve confirmed the details.
         </p>
-        {hidden.length === 0 && <p className="text-sm text-black/60">None. All imported venues are showing.</p>}
+        {hidden.length === 0 && <p className="text-sm text-navy-950/60">None. All imported venues are showing.</p>}
         {hidden.map((v) => (
-          <div key={v.id} className="flex items-center gap-3 rounded-xl border border-black/10 bg-white p-3">
+          <div key={v.id} className="flex items-center gap-3 rounded-xl border border-navy-900/10 bg-white p-3">
             <VenueBadge name={v.name} size={32} />
             <span className="min-w-0 flex-1 truncate text-sm">{v.name}</span>
             <StatusButton id={v.id} status="approved" label="Show on Courts page" className={`${greenBtn} shrink-0`} />
@@ -131,7 +131,7 @@ export default async function AdminPage() {
 
       <section className="space-y-3">
         <h2 className="font-semibold">Claim links ({unclaimed.length})</h2>
-        <p className="text-sm text-black/60">
+        <p className="text-sm text-navy-950/60">
           Send each venue its private link. Once they claim it, the venue is theirs and goes live
           straight away. Anyone with a link can claim that venue, so only send it to the owner.
         </p>
@@ -142,16 +142,16 @@ export default async function AdminPage() {
             ? `Hi ${v.name}! Your venue is listed on Pickleball Slots HK. Claim your free listing here to post discounted slots and fill empty court time: ${link}`
             : "";
           return (
-            <details key={v.id} className="rounded-xl border border-black/10 bg-white p-3">
+            <details key={v.id} className="rounded-xl border border-navy-900/10 bg-white p-3">
               <summary className="flex cursor-pointer list-none items-center gap-3">
                 <VenueBadge name={v.name} size={32} />
                 <span className="min-w-0 flex-1 truncate text-sm font-medium">{v.name}</span>
-                <span className="text-xs text-black/50">{v.district}</span>
+                <span className="text-xs text-navy-950/50">{v.district}</span>
               </summary>
               <div className="mt-3 space-y-2 text-sm">
                 {link ? (
                   <>
-                    <p className="break-all rounded-lg bg-black/[0.03] px-2 py-1.5 font-mono text-xs">{link}</p>
+                    <p className="break-all rounded-lg bg-navy-900/[0.03] px-2 py-1.5 font-mono text-xs">{link}</p>
                     <div className="flex flex-wrap gap-2">
                       <CopyButton text={link} />
                       <CopyButton text={message} label="Copy message" />
@@ -179,7 +179,7 @@ export default async function AdminPage() {
 
 
       <p className="text-center text-sm">
-        <Link href="/courts" className="text-emerald-700 underline">
+        <Link href="/courts" className="text-navy-700 underline">
           View the public directory
         </Link>
       </p>

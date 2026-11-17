@@ -110,8 +110,8 @@ export default async function VenueSlotsPage({
   if (venue.status !== "approved") {
     return (
       <main className="space-y-3">
-        <Link href="/owner" className="text-sm text-emerald-700">← Back</Link>
-        <h1 className="text-xl font-semibold">{venue.name}</h1>
+        <Link href="/owner" className="text-sm text-navy-700">← Back</Link>
+        <h1 className="font-sans text-xl font-semibold normal-case not-italic">{venue.name}</h1>
         <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
           You can post slots once your venue is approved.
         </p>
@@ -124,8 +124,8 @@ export default async function VenueSlotsPage({
       <div className="flex items-center gap-3">
         <VenueBadge name={venue.name} size={44} />
         <div className="min-w-0">
-          <Link href="/owner" className="text-xs text-emerald-700">← My venue</Link>
-          <h1 className="truncate text-lg font-semibold leading-tight">{venue.name}</h1>
+          <Link href="/owner" className="text-xs text-navy-700">← My venue</Link>
+          <h1 className="truncate font-sans text-lg font-semibold normal-case not-italic leading-tight">{venue.name}</h1>
         </div>
       </div>
 
@@ -151,10 +151,10 @@ export default async function VenueSlotsPage({
               scroll={false}
               aria-current={active ? "date" : undefined}
               className={`flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 ${
-                active ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/10 bg-white"
+                active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-900/10 bg-white"
               }`}
             >
-              <span className={`text-[11px] ${active ? "text-white/80" : "text-black/50"}`}>
+              <span className={`text-[11px] ${active ? "text-white/80" : "text-navy-950/50"}`}>
                 {d === today ? "Today" : p.weekday}
               </span>
               <span className="text-lg font-semibold leading-tight">{p.day}</span>
@@ -166,7 +166,7 @@ export default async function VenueSlotsPage({
           );
         })}
       </nav>
-      <p className="-mt-3 flex gap-4 text-xs text-black/50">
+      <p className="-mt-3 flex gap-4 text-xs text-navy-950/50">
         <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-600" /> open</span>
         <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-amber-500" /> booked</span>
       </p>
@@ -175,7 +175,7 @@ export default async function VenueSlotsPage({
       <section className="space-y-3">
         <h2 className="font-semibold">{date === today ? "Today" : formatDay(date)}</h2>
         {daySlots.length === 0 && (
-          <p className="rounded-xl border border-dashed border-black/15 p-4 text-center text-sm text-black/60">
+          <p className="rounded-xl border border-dashed border-navy-900/15 p-4 text-center text-sm text-navy-950/60">
             No slots yet. Add your first one below.
           </p>
         )}
@@ -183,7 +183,7 @@ export default async function VenueSlotsPage({
           .filter((c) => daySlots.some((s) => s.court_id === c.id))
           .map((court) => (
             <div key={court.id} className="space-y-2">
-              {courts.length > 1 && <h3 className="text-sm font-medium text-black/60">{court.name}</h3>}
+              {courts.length > 1 && <h3 className="text-sm font-medium text-navy-950/60">{court.name}</h3>}
               {daySlots
                 .filter((s) => s.court_id === court.id)
                 .map((s) => {
@@ -197,10 +197,10 @@ export default async function VenueSlotsPage({
                         cancelled
                           ? s.bookings.some((x) => x.refund_due)
                             ? "border-red-200 bg-white"
-                            : "border-black/10 bg-black/[0.02] opacity-60"
+                            : "border-navy-900/10 bg-navy-900/[0.02] opacity-60"
                           : booking
                             ? "border-amber-300 bg-amber-50"
-                            : "border-black/10 bg-white"
+                            : "border-navy-900/10 bg-white"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -210,14 +210,14 @@ export default async function VenueSlotsPage({
                           </p>
                           <p className="text-sm">
                             <span className="font-medium">HK${Number(s.discounted_price)}</span>{" "}
-                            <span className="text-black/40 line-through">HK${Number(s.normal_price)}</span>{" "}
-                            <span className="text-emerald-700">{s.discount_rate ?? Number(s.discount_pct)}% off</span>
+                            <span className="text-navy-950/40 line-through">HK${Number(s.normal_price)}</span>{" "}
+                            <span className="text-navy-700">{s.discount_rate ?? Number(s.discount_pct)}% off</span>
                           </p>
                         </div>
                         <span
                           className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
                             cancelled
-                              ? "bg-black/5 text-black/60"
+                              ? "bg-navy-900/5 text-navy-950/60"
                               : booking
                                 ? "bg-amber-200 text-amber-900"
                                 : "bg-emerald-100 text-emerald-900"
@@ -238,13 +238,13 @@ export default async function VenueSlotsPage({
                         <div className="mt-2 flex items-center justify-between gap-2 border-t border-amber-200 pt-2 text-sm">
                           <div className="min-w-0">
                             <p className="truncate font-medium">{booking.player_name}</p>
-                            <p className="text-xs text-black/60">Code {booking.booking_code}</p>
+                            <p className="text-xs text-navy-950/60">Code {booking.booking_code}</p>
                           </div>
                           <a
                             href={whatsappUrl(booking.player_phone)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="shrink-0 rounded-lg bg-emerald-700 px-2.5 py-1 text-xs font-medium text-white"
+                            className="shrink-0 rounded-lg bg-navy-900 px-2.5 py-1 text-xs font-medium text-white"
                           >
                             WhatsApp player
                           </a>
@@ -259,7 +259,7 @@ export default async function VenueSlotsPage({
                             </p>
                           ))}
                       {!cancelled && !booking && new Date(s.starts_at).getTime() - Date.now() < 30 * 60000 && (
-                        <p className="mt-1 text-xs text-black/50">Booking closed (30 minutes before start).</p>
+                        <p className="mt-1 text-xs text-navy-950/50">Booking closed (30 minutes before start).</p>
                       )}
                       {!cancelled && !booking && (
                         <form action={cancelSlot} className="mt-2 flex justify-end">
@@ -275,7 +275,7 @@ export default async function VenueSlotsPage({
                         <CourtUnavailableButton venueId={id} bookingId={booking.id} paid={paid || booking.status === "payment_reported"} />
                       )}
                       {!cancelled && booking && (
-                        <p className="mt-1 text-right text-xs text-black/50">
+                        <p className="mt-1 text-right text-xs text-navy-950/50">
                           {paid
                             ? "Paid and locked: it can't be cancelled or reposted."
                             : booking.status === "payment_reported"
@@ -291,10 +291,10 @@ export default async function VenueSlotsPage({
       </section>
 
       {/* Add a slot */}
-      <section className="rounded-2xl border border-black/10 bg-white p-4 shadow-sm">
+      <section className="rounded-2xl border border-navy-900/10 bg-white p-4 shadow-sm">
         <h2 className="mb-3 font-semibold">Add a slot</h2>
         {courts.length === 0 ? (
-          <p className="text-sm text-black/60">Add a court first (below).</p>
+          <p className="text-sm text-navy-950/60">Add a court first (below).</p>
         ) : (
           <SlotForm
             key={date}
@@ -310,13 +310,13 @@ export default async function VenueSlotsPage({
 
       <Link
         href={`/owner/venue/${id}/setup`}
-        className="flex items-center justify-between rounded-2xl border border-black/10 bg-white p-4"
+        className="flex items-center justify-between rounded-2xl border border-navy-900/10 bg-white p-4"
       >
         <span>
           <span className="block font-semibold">Venue setup</span>
-          <span className="text-sm text-black/60">Details, {courts.length} court{courts.length === 1 ? "" : "s"}, price list</span>
+          <span className="text-sm text-navy-950/60">Details, {courts.length} court{courts.length === 1 ? "" : "s"}, price list</span>
         </span>
-        <span className="text-black/40">→</span>
+        <span className="text-navy-950/40">→</span>
       </Link>
     </main>
   );

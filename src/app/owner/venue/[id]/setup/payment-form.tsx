@@ -15,7 +15,7 @@ export function PaymentForm({
   return (
     <form action={action} className="space-y-4">
       <input type="hidden" name="venue_id" value={venueId} />
-      <p className="text-sm text-black/60">
+      <p className="text-sm text-navy-950/60">
         Players pay you directly. After booking, they see these details (text only, no payment link) and must pay within
         1 hour, using their booking code as the reference. Only players with a booking can see them.
       </p>

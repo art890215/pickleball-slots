@@ -14,12 +14,18 @@ const TABS = [
 export function BottomNav() {
   const path = usePathname();
   return (
-    <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-20 border-t border-black/10 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
+    <nav aria-label="Main" className="on-dark fixed inset-x-0 bottom-0 z-20 border-t border-white/10 bg-navy-900 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-12px_rgba(0,19,42,0.5)]">
       <div className="mx-auto grid max-w-md grid-cols-4">
         {TABS.map((t) => {
           const active = t.match.some((m) => path === m || path.startsWith(`${m}/`));
           return (
-            <Link key={t.href} href={t.href} aria-current={active ? "page" : undefined} className={`flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${active ? "text-emerald-700" : "text-black/50"}`}>
+            <Link
+              key={t.href}
+              href={t.href}
+              aria-current={active ? "page" : undefined}
+              className={`relative flex flex-col items-center gap-0.5 pb-2 pt-2.5 text-[10.5px] font-semibold uppercase tracking-wider transition-colors ${active ? "text-ball-400" : "text-white/60"}`}
+            >
+              {active && <span aria-hidden className="absolute inset-x-6 top-0 h-[3px] -skew-x-12 rounded-b bg-ball-400" />}
               <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={active ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d={t.icon} />
               </svg>

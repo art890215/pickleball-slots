@@ -58,7 +58,7 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
     return s ? `/slots?${s}` : "/slots";
   };
   const chip = (active: boolean) =>
-    `shrink-0 rounded-full border px-3 py-1.5 text-sm ${active ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/15 bg-white"}`;
+    `shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-900/15 bg-white text-navy-900"}`;
 
   const byDay = new Map<string, Slot[]>();
   for (const s of slots) {
@@ -69,24 +69,25 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
   return (
     <main className="space-y-4">
       <div>
-        <h1 className="text-xl font-semibold">Discounted slots</h1>
-        <p className="mt-0.5 text-sm text-black/60">
-          {slots.length} slot{slots.length === 1 ? "" : "s"} at 20–40% off · pay the venue by FPS or PayMe
+        <h1 className="text-[1.65rem] font-extrabold leading-tight">Discounted slots</h1>
+        <p className="mt-1 text-sm text-navy-950/65">
+          <span className="rounded bg-ball-400 px-1.5 py-0.5 font-display text-xs font-extrabold italic text-navy-900">{slots.length}</span>{" "}
+          slot{slots.length === 1 ? "" : "s"} at 20–40% off · pay by FPS or PayMe
         </p>
       </div>
 
       {/* Day */}
       <nav aria-label="Day" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-        <Link href={href({ date: undefined })} scroll={false} className={`flex w-14 shrink-0 flex-col items-center justify-center rounded-xl border py-2 text-sm font-medium ${!date ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/10 bg-white"}`}>
+        <Link href={href({ date: undefined })} scroll={false} className={`flex w-14 shrink-0 flex-col items-center justify-center rounded-xl border py-2 font-display text-sm font-extrabold uppercase italic ${!date ? "border-navy-900 bg-navy-900 text-ball-400" : "border-navy-900/10 bg-white text-navy-900"}`}>
           All
         </Link>
         {Array.from({ length: DAYS_SHOWN }, (_, i) => addDays(today, i)).map((d) => {
           const p = dayParts(d);
           const active = d === date;
           return (
-            <Link key={d} href={href({ date: d })} scroll={false} className={`flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 ${active ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/10 bg-white"}`}>
-              <span className={`text-[11px] ${active ? "text-white/80" : "text-black/50"}`}>{d === today ? "Today" : p.weekday}</span>
-              <span className="text-lg font-semibold leading-tight">{p.day}</span>
+            <Link key={d} href={href({ date: d })} scroll={false} className={`flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 ${active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-900/10 bg-white text-navy-900"}`}>
+              <span className={`text-[10.5px] font-semibold uppercase tracking-wide ${active ? "text-white/75" : "text-navy-950/50"}`}>{d === today ? "Today" : p.weekday}</span>
+              <span className={`font-display text-xl font-extrabold italic leading-tight ${active ? "text-ball-400" : ""}`}>{p.day}</span>
             </Link>
           );
         })}
@@ -109,36 +110,42 @@ export default async function SlotsPage({ searchParams }: { searchParams: Promis
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">Couldn&apos;t load slots: {error.message}</p>}
 
       {slots.length === 0 && !error && (
-        <div className="rounded-2xl border border-dashed border-black/15 p-6 text-center">
-          <p className="font-medium">No slots match</p>
-          <p className="mt-1 text-sm text-black/60">Try another day or area. Venues post new slots all the time.</p>
-          <Link href="/courts" className="mt-3 inline-block text-sm text-emerald-700 underline">Browse all courts</Link>
+        <div className="rounded-2xl border border-dashed border-navy-900/20 bg-white/60 p-6 text-center">
+          <p className="font-display text-lg font-extrabold uppercase italic text-navy-900">No slots match</p>
+          <p className="mt-1 text-sm text-navy-950/65">Try another day or area. Venues post new slots all the time.</p>
+          <Link href="/courts" className="mt-3 inline-block text-sm font-semibold text-navy-700 underline underline-offset-4">Browse all courts</Link>
         </div>
       )}
 
       {[...byDay.entries()].map(([d, list]) => (
-        <section key={d} className="space-y-2">
-          {!date && <h2 className="pt-1 text-sm font-semibold text-black/60">{d === today ? "Today" : formatDay(d)}</h2>}
+        <section key={d} className="space-y-2.5">
+          {!date && (
+            <h2 className="section-label pt-1">
+              {d === today ? "Today" : formatDay(d)}
+            </h2>
+          )}
           {list.map((s) => {
             const rate = s.discount_rate ?? Math.round(Number(s.discount_pct));
             const hours = hoursBetween(s.starts_at, s.ends_at);
             return (
-              <Link key={s.slot_id} href={`/slots/${s.slot_id}`} className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white p-3 shadow-sm transition active:scale-[0.99]">
-                <div className="w-14 shrink-0 text-center">
-                  <p className="text-lg font-semibold tabular-nums leading-tight">{hkTime(s.starts_at)}</p>
-                  <p className="text-xs text-black/50">{hours % 1 ? hours.toFixed(1) : hours} hr</p>
+              <Link key={s.slot_id} href={`/slots/${s.slot_id}`} className="flex items-stretch overflow-hidden rounded-2xl border border-navy-900/10 bg-white shadow-sm transition active:scale-[0.99]">
+                <div className="on-dark flex w-[4.25rem] shrink-0 flex-col items-center justify-center bg-navy-900 px-1 py-3 text-white">
+                  <p className="font-display text-xl font-extrabold italic tabular-nums leading-none">{hkTime(s.starts_at)}</p>
+                  <p className="mt-1.5 text-[11px] font-semibold text-ball-400">{hours % 1 ? hours.toFixed(1) : hours} hr</p>
                 </div>
-                <VenueBadge name={s.venue_name} size={36} />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium leading-snug">{s.venue_name}</p>
-                  <p className="truncate text-xs text-black/60">{s.court_name} · {s.district}</p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="font-bold text-emerald-800">HK${Number(s.discounted_price)}</p>
-                  <p className="text-xs">
-                    <span className="text-black/40 line-through">${Number(s.normal_price)}</span>{" "}
-                    <span className="rounded bg-emerald-100 px-1 font-semibold text-emerald-900">−{rate}%</span>
-                  </p>
+                <div className="flex min-w-0 flex-1 items-center gap-2.5 p-3">
+                  <VenueBadge name={s.venue_name} size={34} />
+                  <div className="min-w-0 flex-1">
+                    <p className="line-clamp-2 font-semibold leading-snug text-navy-900">{s.venue_name}</p>
+                    <p className="truncate text-xs text-navy-950/60">{s.court_name} · {s.district}</p>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className="font-display text-lg font-extrabold italic leading-none text-navy-900">HK${Number(s.discounted_price)}</p>
+                    <p className="mt-1.5 flex items-center justify-end gap-1.5 text-xs">
+                      <span className="text-navy-950/40 line-through">${Number(s.normal_price)}</span>
+                      <span className="rounded bg-ball-400 px-1.5 py-0.5 font-display text-[11px] font-extrabold italic text-navy-900">−{rate}%</span>
+                    </p>
+                  </div>
                 </div>
               </Link>
             );
