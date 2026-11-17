@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
-import Image from "next/image";
 import Link from "next/link";
 import { BottomNav } from "@/components/bottom-nav";
 import "./globals.css";
@@ -34,8 +33,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <header className="on-dark sticky top-0 z-20 bg-navy-950 text-white shadow-[0_1px_0_0_rgba(182,255,5,0.35)]">
           <div className="mx-auto flex max-w-lg items-center gap-3 px-4 py-2.5">
             <Link href="/" className="flex items-center gap-3" aria-label="Pickleball Slots HK by HKPPT, home">
-              <Image src="/brand/hkppt-mark-light.png" alt="HKPPT" width={58} height={22} priority className="h-[24px] w-auto" />
-              <span className="h-6 w-px bg-white/20" aria-hidden />
               <span className="leading-tight">
                 <span className="block text-[11px] font-semibold tracking-[0.18em] text-ball-400">PICKLEBALL SLOTS HK</span>
                 <span className="block text-sm font-semibold text-white">折扣場地 Discounted Courts</span>
