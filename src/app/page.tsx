@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 const STEPS = [
@@ -12,17 +11,9 @@ const FACTS = ["20–40% off 折", "FPS / PayMe", "14 日 Next 14 days"];
 export default function Home() {
   return (
     <main className="space-y-5">
-      {/* Full-width navy band with the round logo, like the HKPPT site header */}
-      <section className="on-dark -mx-4 -mt-5 bg-navy-950 px-4 pb-8 pt-7 text-center text-white">
-        <Image
-          src="/brand/hkppt-logo-light.png"
-          alt="HKPPT: Hong Kong Premier Pickleball Tournament"
-          width={720}
-          height={668}
-          priority
-          className="mx-auto h-auto w-[210px]"
-        />
-        <p className="mt-3 text-sm font-semibold tracking-[0.2em] text-ball-400">PICKLEBALL SLOTS HK</p>
+      {/* Full-width navy band, like the HKPPT site header */}
+      <section className="on-dark -mx-4 -mt-5 bg-navy-950 px-4 pb-8 pt-8 text-center text-white">
+        <p className="text-sm font-semibold tracking-[0.2em] text-ball-400">PICKLEBALL SLOTS HK</p>
         <h1 className="mt-2 text-[1.75rem] font-bold leading-tight text-white">玩多啲，慳多啲</h1>
         <p className="mt-1 text-[15px] text-white/65">Play more. Pay less.</p>
       </section>
