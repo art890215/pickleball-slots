@@ -35,7 +35,8 @@ export function initials(name: string): string {
 
 // A soft, stable background colour per venue for the initials badge.
 export function badgeColor(name: string): string {
-  const colors = ["#047857", "#0369a1", "#7c3aed", "#b45309", "#be123c", "#0f766e", "#4d7c0f", "#1d4ed8"];
+  // Navy and cool blue-greys that sit well next to the HKPPT brand colours.
+  const colors = ["#001f3d", "#0f2f52", "#1d4067", "#14506b", "#254a5c", "#2f3f70", "#173b59", "#35597f"];
   let h = 0;
   for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return colors[h % colors.length];

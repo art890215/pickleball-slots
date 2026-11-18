@@ -20,9 +20,9 @@ function LoginInner({ audience }: { audience: Audience }) {
   return (
     <main className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold">{audience === "owner" ? "Court owner log in" : "Log in"}</h1>
+        <h1 className="text-2xl font-bold leading-tight">{audience === "owner" ? "Court owner log in" : "Log in"}</h1>
         {audience === "player" && next.startsWith("/slots/") && (
-          <p className="mt-1 text-sm text-black/70">Log in to book this slot.</p>
+          <p className="mt-1 text-sm text-navy-950/70">Log in to book this slot.</p>
         )}
       </div>
       <form action={action} className="space-y-4">
@@ -39,7 +39,7 @@ function LoginInner({ audience }: { audience: Audience }) {
       </form>
       <p className="text-center text-sm">
         New here?{" "}
-        <Link href={withNext(signupPath, next || null)} className="font-medium text-emerald-700 underline">
+        <Link href={withNext(signupPath, next || null)} className="font-medium text-navy-700 underline">
           Create an account
         </Link>
       </p>
@@ -62,8 +62,8 @@ function SignUpInner({ audience }: { audience: Audience }) {
   return (
     <main className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold">{title}</h1>
-        <p className="mt-1 text-sm text-black/70">{intro}</p>
+        <h1 className="text-2xl font-bold leading-tight">{title}</h1>
+        <p className="mt-1 text-sm text-navy-950/70">{intro}</p>
       </div>
       {state?.notice ? (
         <NoticeBox message={state.notice} />
@@ -91,7 +91,7 @@ function SignUpInner({ audience }: { audience: Audience }) {
       )}
       <p className="text-center text-sm">
         Already have an account?{" "}
-        <Link href={withNext(loginPath, next || null)} className="font-medium text-emerald-700 underline">Log in</Link>
+        <Link href={withNext(loginPath, next || null)} className="font-medium text-navy-700 underline">Log in</Link>
       </p>
     </main>
   );

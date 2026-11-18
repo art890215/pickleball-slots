@@ -5,7 +5,7 @@ import { useState } from "react";
 export function CopyButton({
   text,
   label = "Copy link",
-  className = "rounded-lg border border-black/15 px-3 py-1.5 text-sm",
+  className = "rounded-lg border border-navy-900/15 px-3 py-1.5 text-sm",
 }: {
   text: string;
   label?: string;

@@ -47,7 +47,7 @@ export default async function CourtsPage({
       key={label}
       href={href}
       className={`shrink-0 rounded-full border px-3 py-1.5 text-sm ${
-        active ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/15 bg-white"
+        active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-900/15 bg-white"
       }`}
     >
       {label}
@@ -57,8 +57,8 @@ export default async function CourtsPage({
   return (
     <main className="space-y-4">
       <div>
-        <h1 className="text-xl font-semibold">Pickleball courts in Hong Kong</h1>
-        <p className="mt-1 text-sm text-black/70">
+        <h1 className="text-2xl font-bold leading-tight">香港匹克球場<span className="mt-0.5 block text-[13px] font-normal text-navy-900/55">Pickleball courts in Hong Kong</span></h1>
+        <p className="mt-1 text-sm text-navy-950/70">
           {venues.length} private venues{activeRegion ? ` in ${activeRegion}` : ""}.
         </p>
       </div>
@@ -76,17 +76,17 @@ export default async function CourtsPage({
 
       <ul className="space-y-3">
         {venues.map((v) => (
-          <li key={v.id} className="rounded-xl border border-black/10 bg-white p-4">
+          <li key={v.id} className="rounded-xl border border-navy-900/10 bg-white p-4">
             <div className="flex gap-3">
               <VenueBadge name={v.name} />
               <div className="min-w-0 flex-1">
                 <h2 className="font-semibold leading-snug">{v.name}</h2>
-                <p className="text-sm text-black/60">
+                <p className="text-sm text-navy-950/60">
                   {v.district} · {v.region}
                 </p>
                 <span
                   className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                    v.is_claimed ? "bg-emerald-100 text-emerald-900" : "bg-black/5 text-black/60"
+                    v.is_claimed ? "bg-emerald-100 text-emerald-900" : "bg-navy-900/5 text-navy-950/60"
                   }`}
                 >
                   {v.is_claimed ? "On Pickleball Slots HK" : "Not taking bookings here yet"}
@@ -101,7 +101,7 @@ export default async function CourtsPage({
               </div>
               {v.opening_hours && (
                 <div>
-                  <dt className="inline text-black/60">Hours: </dt>
+                  <dt className="inline text-navy-950/60">Hours: </dt>
                   <dd className="inline">{v.opening_hours}</dd>
                 </div>
               )}
@@ -112,7 +112,7 @@ export default async function CourtsPage({
                 href={googleMapsUrl(v.name, v.address)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg border border-black/15 px-3 py-1.5"
+                className="rounded-lg border border-navy-900/15 px-3 py-1.5"
               >
                 📍 Map
               </a>
@@ -121,7 +121,7 @@ export default async function CourtsPage({
                   href={instagramUrl(v.instagram)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg border border-black/15 px-3 py-1.5"
+                  className="rounded-lg border border-navy-900/15 px-3 py-1.5"
                 >
                   Instagram
                 </a>
@@ -131,7 +131,7 @@ export default async function CourtsPage({
                   href={whatsappUrl(v.whatsapp)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg border border-black/15 px-3 py-1.5"
+                  className="rounded-lg border border-navy-900/15 px-3 py-1.5"
                 >
                   WhatsApp
                 </a>
@@ -141,7 +141,7 @@ export default async function CourtsPage({
                   href={v.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg border border-black/15 px-3 py-1.5"
+                  className="rounded-lg border border-navy-900/15 px-3 py-1.5"
                 >
                   Website
                 </a>
@@ -151,10 +151,10 @@ export default async function CourtsPage({
         ))}
       </ul>
 
-      <p className="rounded-xl bg-black/[0.03] p-4 text-sm text-black/70">
+      <p className="rounded-xl bg-navy-900/[0.03] p-4 text-sm text-navy-950/70">
         Details come from public sources and may change, so please check with the venue before
         you go. <strong>Own one of these venues?</strong>{" "}
-        <Link href="/owner/signup" className="text-emerald-700 underline">
+        <Link href="/owner/signup" className="text-navy-700 underline">
           Join to post discounted slots
         </Link>
         .

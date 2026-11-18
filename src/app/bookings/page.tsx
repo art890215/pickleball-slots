@@ -13,17 +13,17 @@ const BADGE: Record<MyBooking["status"], { label: string; cls: string }> = {
   awaiting_payment: { label: "Pay now", cls: "bg-amber-100 text-amber-900" },
   payment_reported: { label: "Checking payment", cls: "bg-sky-100 text-sky-900" },
   confirmed: { label: "Confirmed", cls: "bg-emerald-100 text-emerald-900" },
-  cancelled: { label: "Cancelled", cls: "bg-black/5 text-black/60" },
-  expired: { label: "Expired", cls: "bg-black/5 text-black/60" },
+  cancelled: { label: "Cancelled", cls: "bg-navy-900/5 text-navy-950/60" },
+  expired: { label: "Expired", cls: "bg-navy-900/5 text-navy-950/60" },
 };
 
 function Row({ b }: { b: MyBooking }) {
   return (
-    <Link href={`/bookings/${b.booking_id}`} className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white p-3">
+    <Link href={`/bookings/${b.booking_id}`} className="flex items-center gap-3 rounded-2xl border border-navy-900/10 bg-white p-3">
       <VenueBadge name={b.venue_name} size={36} />
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium">{b.venue_name}</p>
-        <p className="text-xs text-black/60">
+        <p className="text-xs text-navy-950/60">
           {formatDay(hkDate(b.starts_at))} · {hkTime(b.starts_at)}–{hkTime(b.ends_at)} · {b.court_name}
         </p>
       </div>
@@ -49,13 +49,13 @@ export default async function MyBookingsPage() {
 
   return (
     <main className="space-y-5">
-      <h1 className="text-xl font-semibold">My bookings</h1>
+      <h1 className="text-2xl font-bold leading-tight">我的預訂<span className="mt-0.5 block text-[13px] font-normal text-navy-900/55">My bookings</span></h1>
       <section className="space-y-2">
-        <h2 className="text-sm font-semibold text-black/60">Upcoming</h2>
+        <h2 className="section-label">Upcoming</h2>
         {upcoming.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-black/15 p-5 text-center text-sm">
+          <div className="rounded-2xl border border-dashed border-navy-900/15 p-5 text-center text-sm">
             <p>No upcoming bookings.</p>
-            <Link href="/slots" className="mt-2 inline-block font-medium text-emerald-700 underline">Find a discounted slot</Link>
+            <Link href="/slots" className="mt-2 inline-block font-medium text-navy-700 underline">Find a discounted slot</Link>
           </div>
         ) : (
           upcoming.map((b) => <Row key={b.booking_id} b={b} />)
@@ -63,7 +63,7 @@ export default async function MyBookingsPage() {
       </section>
       {past.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-sm font-semibold text-black/60">Past and cancelled</h2>
+          <h2 className="section-label">Past and cancelled</h2>
           {past.map((b) => <Row key={b.booking_id} b={b} />)}
         </section>
       )}

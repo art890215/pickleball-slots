@@ -16,7 +16,7 @@ export function ClaimForm(props: {
   return (
     <form action={action} className="space-y-4">
       <input type="hidden" name="token" value={props.token} />
-      <fieldset className="space-y-4 rounded-xl border border-black/10 bg-white p-4">
+      <fieldset className="space-y-4 rounded-xl border border-navy-900/10 bg-white p-4">
         <legend className="px-1 text-sm font-semibold">About you</legend>
         <Field label="Your name">
           <input name="full_name" defaultValue={props.defaultName} required className={inputClass} />
@@ -28,9 +28,9 @@ export function ClaimForm(props: {
           <input name="phone" type="tel" inputMode="tel" defaultValue={props.defaultPhone} required className={inputClass} />
         </Field>
       </fieldset>
-      <fieldset className="space-y-4 rounded-xl border border-black/10 bg-white p-4">
+      <fieldset className="space-y-4 rounded-xl border border-navy-900/10 bg-white p-4">
         <legend className="px-1 text-sm font-semibold">Venue contact details</legend>
-        <p className="text-xs text-black/60">We filled in what we found online. Please check and correct.</p>
+        <p className="text-xs text-navy-950/60">We filled in what we found online. Please check and correct.</p>
         <Field label="Venue WhatsApp number">
           <input name="whatsapp" type="tel" inputMode="tel" defaultValue={props.whatsapp} required className={inputClass} />
         </Field>

@@ -26,7 +26,7 @@ export function VenueForm({
 
   return (
     <form action={action} className="space-y-4">
-      <fieldset className="space-y-4 rounded-xl border border-black/10 bg-white p-4">
+      <fieldset className="space-y-4 rounded-xl border border-navy-900/10 bg-white p-4">
         <legend className="px-1 text-sm font-semibold">About you</legend>
         <Field label="Your name">
           <input name="full_name" defaultValue={defaultName} required className={inputClass} />
@@ -46,7 +46,7 @@ export function VenueForm({
         </Field>
       </fieldset>
 
-      <fieldset className="space-y-4 rounded-xl border border-black/10 bg-white p-4">
+      <fieldset className="space-y-4 rounded-xl border border-navy-900/10 bg-white p-4">
         <legend className="px-1 text-sm font-semibold">Your venue</legend>
         <Field label="Venue name">
           <input
@@ -67,22 +67,22 @@ export function VenueForm({
             className={inputClass}
           />
         </Field>
-        <div className="rounded-lg bg-black/[0.03] px-3 py-2 text-sm">
+        <div className="rounded-lg bg-navy-900/[0.03] px-3 py-2 text-sm">
           {canCheckMap ? (
             <a
               href={googleMapsUrl(venueName, address)}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-emerald-700 underline"
+              className="font-medium text-navy-700 underline"
             >
               📍 Check on Google Maps ↗
             </a>
           ) : (
-            <span className="text-black/60">
+            <span className="text-navy-950/60">
               📍 Enter the venue name and address to check the location on Google Maps.
             </span>
           )}
-          <p className="mt-1 text-xs text-black/60">
+          <p className="mt-1 text-xs text-navy-950/60">
             Players will get this map link. If it finds the wrong place, add more detail to the
             address (building, street number).
           </p>

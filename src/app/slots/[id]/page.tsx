@@ -49,74 +49,75 @@ export default async function SlotPage({ params }: { params: Promise<{ id: strin
 
   return (
     <main className="space-y-4">
-      <Link href="/slots" className="text-sm text-emerald-700">← All slots</Link>
+      <Link href="/slots" className="text-sm font-semibold text-navy-700">← All slots</Link>
 
-      <section className="overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm">
-        <div className="bg-emerald-700 p-4 text-white">
-          <p className="text-sm text-white/80">{formatDay(hkDate(slot.starts_at))}</p>
-          <p className="text-3xl font-bold tabular-nums">
+      <section className="overflow-hidden rounded-2xl border border-navy-900/10 bg-white shadow-sm">
+        <div className="on-dark relative overflow-hidden bg-gradient-to-br from-navy-800 to-navy-950 p-4 text-white">
+          <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-ball-400/20 blur-2xl" />
+          <p className="relative text-xs font-semibold tracking-[0.18em] text-ball-400">{formatDay(hkDate(slot.starts_at))}</p>
+          <p className="relative mt-1 font-display text-[2rem] font-bold leading-none tabular-nums">
             {hkTime(slot.starts_at)}–{hkTime(slot.ends_at)}
           </p>
-          <p className="text-sm text-white/80">
+          <p className="relative mt-2 text-sm text-white/80">
             {hours % 1 ? hours.toFixed(1) : hours} hour{hours === 1 ? "" : "s"} · {slot.court_name}
           </p>
         </div>
         <div className="flex items-end justify-between p-4">
           <div>
-            <p className="text-sm text-black/60">You pay</p>
-            <p className="text-2xl font-bold text-emerald-800">HK${price}</p>
+            <p className="text-sm text-navy-950/60">You pay</p>
+            <p className="font-display text-3xl font-bold leading-tight text-navy-900">HK${price}</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-black/40 line-through">HK${Number(slot.normal_price)}</p>
-            <p className="rounded-md bg-emerald-100 px-2 py-0.5 text-sm font-semibold text-emerald-900">{rate}% off</p>
+            <p className="text-sm text-navy-950/40 line-through">HK${Number(slot.normal_price)}</p>
+            <p className="mt-1 inline-block rounded-md bg-ball-400 px-2.5 py-1 font-display text-sm font-bold text-navy-900">{rate}% off</p>
           </div>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-black/10 bg-white p-4">
+      <section className="rounded-2xl border border-navy-900/10 bg-white p-4">
         <div className="flex gap-3">
           <VenueBadge name={slot.venue_name} size={44} />
           <div className="min-w-0">
-            <h1 className="font-semibold leading-snug">{slot.venue_name}</h1>
-            <p className="text-sm text-black/60">{slot.address}</p>
-            <p className="text-xs text-black/50">{slot.district} · {slot.region}</p>
+            <h1 className="font-sans text-base font-semibold normal-case leading-snug">{slot.venue_name}</h1>
+            <p className="text-sm text-navy-950/60">{slot.address}</p>
+            <p className="text-xs text-navy-950/50">{slot.district} · {slot.region}</p>
           </div>
         </div>
         <div className="mt-3 flex flex-wrap gap-2 text-sm">
-          <a href={googleMapsUrl(slot.venue_name, slot.address)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-black/15 px-3 py-1.5">📍 Map</a>
+          <a href={googleMapsUrl(slot.venue_name, slot.address)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-navy-900/15 px-3 py-1.5">📍 Map</a>
           {slot.venue_instagram && (
-            <a href={instagramUrl(slot.venue_instagram)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-black/15 px-3 py-1.5">Instagram</a>
+            <a href={instagramUrl(slot.venue_instagram)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-navy-900/15 px-3 py-1.5">Instagram</a>
           )}
           {slot.venue_whatsapp && (
-            <a href={whatsappUrl(slot.venue_whatsapp)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-black/15 px-3 py-1.5">WhatsApp venue</a>
+            <a href={whatsappUrl(slot.venue_whatsapp)} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-navy-900/15 px-3 py-1.5">WhatsApp venue</a>
           )}
         </div>
       </section>
 
       {!slot.is_available ? (
-        <div className="rounded-2xl border border-black/10 bg-white p-4 text-center">
+        <div className="rounded-2xl border border-navy-900/10 bg-white p-4 text-center">
           <p className="font-semibold">
             {new Date(slot.starts_at).getTime() - Date.now() < 30 * 60000
               ? "Booking has closed for this slot"
               : "This slot has just been taken"}
           </p>
           {new Date(slot.starts_at).getTime() - Date.now() < 30 * 60000 && (
-            <p className="mt-1 text-sm text-black/60">Slots can be booked until 30 minutes before they start.</p>
+            <p className="mt-1 text-sm text-navy-950/60">Slots can be booked until 30 minutes before they start.</p>
           )}
-          <Link href="/slots" className="mt-2 inline-block text-sm text-emerald-700 underline">See other slots</Link>
+          <Link href="/slots" className="mt-2 inline-block text-sm text-navy-700 underline">See other slots</Link>
         </div>
       ) : !user ? (
-        <section className="space-y-2 rounded-2xl border border-black/10 bg-white p-4">
-          <p className="text-sm text-black/70">Log in to book. Your booking code is emailed to you.</p>
-          <Link href={`/signup?next=/slots/${id}`} className="block rounded-lg bg-emerald-700 px-4 py-3 text-center font-medium text-white">
+        <section className="space-y-2 rounded-2xl border border-navy-900/10 bg-white p-4">
+          <p className="text-sm text-navy-950/70">Log in to book. Your booking code is emailed to you.</p>
+          <Link href={`/signup?next=/slots/${id}`} className="block rounded-xl bg-navy-900 px-4 py-3.5 text-center font-display font-bold text-ball-400 shadow-sm transition active:scale-[0.99]">
             Create an account to book
           </Link>
-          <Link href={`/login?next=/slots/${id}`} className="block rounded-lg border border-black/15 px-4 py-3 text-center font-medium">
+          <Link href={`/login?next=/slots/${id}`} className="block rounded-lg border border-navy-900/15 px-4 py-3 text-center font-medium">
             I already have an account
           </Link>
         </section>
       ) : (
-        <section className="rounded-2xl border border-black/10 bg-white p-4">
+        <section className="rounded-2xl border border-navy-900/10 bg-white p-4">
           <h2 className="mb-3 font-semibold">Book this slot</h2>
           <BookForm slotId={id} price={price} defaultName={profile?.full_name ?? ""} defaultPhone={profile?.phone ?? ""} />
         </section>

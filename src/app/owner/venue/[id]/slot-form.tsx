@@ -23,7 +23,7 @@ function endTime(start: string, minutes: number) {
 }
 
 const chip = (active: boolean) =>
-  `rounded-lg border px-3 py-2 text-sm font-medium ${active ? "border-emerald-700 bg-emerald-700 text-white" : "border-black/15 bg-white"}`;
+  `rounded-lg border px-3 py-2 text-sm font-medium ${active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-900/15 bg-white"}`;
 
 export function SlotForm({
   venueId,
@@ -70,7 +70,7 @@ export function SlotForm({
       <input type="hidden" name="normal_price" value={normal ?? ""} />
       <input type="hidden" name="discount_rate" value={rate ?? ""} />
 
-      <p className="text-sm text-black/60">
+      <p className="text-sm text-navy-950/60">
         Adding to <strong className="text-black">{dateLabel}</strong>
       </p>
 
@@ -96,9 +96,9 @@ export function SlotForm({
         </label>
         <div>
           <span className="text-sm font-medium">Ends</span>
-          <p className="mt-1 rounded-lg bg-black/[0.04] px-3 py-2.5 text-base">
+          <p className="mt-1 rounded-lg bg-navy-900/[0.04] px-3 py-2.5 text-base">
             {endTime(start, duration)}
-            {endTime(start, duration) <= start && <span className="ml-1 text-xs text-black/50">next day</span>}
+            {endTime(start, duration) <= start && <span className="ml-1 text-xs text-navy-950/50">next day</span>}
           </p>
         </div>
       </div>
@@ -111,14 +111,14 @@ export function SlotForm({
       </div>
 
       {/* Original price */}
-      <div className="rounded-xl bg-black/[0.03] p-3">
+      <div className="rounded-xl bg-navy-900/[0.03] p-3">
         <div className="flex items-baseline justify-between gap-2">
           <span className="text-sm font-medium">Original price</span>
           {override === null ? (
             <span className="text-lg font-semibold">{listPrice !== null ? `HK$${listPrice}` : "—"}</span>
           ) : (
             <div className="relative w-32">
-              <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-black/50">HK$</span>
+              <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-navy-950/50">HK$</span>
               <input
                 type="number"
                 inputMode="numeric"
@@ -126,12 +126,12 @@ export function SlotForm({
                 autoFocus
                 value={override}
                 onChange={(e) => setOverride(e.target.value)}
-                className="w-full rounded-lg border border-black/20 bg-white py-1.5 pl-10 pr-2 text-right text-base"
+                className="w-full rounded-lg border border-navy-900/20 bg-white py-1.5 pl-10 pr-2 text-right text-base"
               />
             </div>
           )}
         </div>
-        <p className="mt-1 text-xs text-black/60">
+        <p className="mt-1 text-xs text-navy-950/60">
           {override !== null ? (
             <>Custom price for this slot only (e.g. a public holiday). </>
           ) : listPrice !== null ? (
@@ -142,18 +142,18 @@ export function SlotForm({
             <>You haven&apos;t set a price list yet. </>
           )}
           {override === null ? (
-            <button type="button" onClick={() => setOverride(listPrice ? String(listPrice) : "")} className="text-emerald-700 underline">
+            <button type="button" onClick={() => setOverride(listPrice ? String(listPrice) : "")} className="text-navy-700 underline">
               {listPrice !== null ? "Change for this slot" : "Enter a price"}
             </button>
           ) : (
-            <button type="button" onClick={() => setOverride(null)} className="text-emerald-700 underline">
+            <button type="button" onClick={() => setOverride(null)} className="text-navy-700 underline">
               Use price list
             </button>
           )}
           {!rules.length && (
             <>
               {" · "}
-              <Link href={`/owner/venue/${venueId}/setup`} className="text-emerald-700 underline">Set up price list</Link>
+              <Link href={`/owner/venue/${venueId}/setup`} className="text-navy-700 underline">Set up price list</Link>
             </>
           )}
         </p>
@@ -172,11 +172,11 @@ export function SlotForm({
       </div>
 
       {discounted !== null && normal && (
-        <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5">
-          <span className="text-sm text-emerald-900">Players pay</span>
+        <div className="flex items-center justify-between rounded-xl border border-ball-400 bg-ball-50 px-3 py-2.5">
+          <span className="text-sm font-medium text-navy-900">Players pay</span>
           <span>
-            <span className="text-xl font-bold text-emerald-900">HK${discounted}</span>{" "}
-            <span className="text-sm text-black/40 line-through">HK${normal}</span>
+            <span className="font-display text-xl font-bold text-navy-900">HK${discounted}</span>{" "}
+            <span className="text-sm text-navy-950/40 line-through">HK${normal}</span>
           </span>
         </div>
       )}

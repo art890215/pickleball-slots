@@ -28,8 +28,8 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
   if (!claim) {
     return (
       <main className="space-y-3">
-        <h1 className="text-xl font-semibold">This link isn&apos;t valid</h1>
-        <p className="text-sm text-black/70">
+        <h1 className="text-2xl font-bold leading-tight">This link isn&apos;t valid</h1>
+        <p className="text-sm text-navy-950/70">
           Please check you copied the whole link, or contact us for a new one.
         </p>
       </main>
@@ -37,12 +37,12 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
   }
 
   const venueCard = (
-    <div className="flex gap-3 rounded-xl border border-black/10 bg-white p-4">
+    <div className="flex gap-3 rounded-xl border border-navy-900/10 bg-white p-4">
       <VenueBadge name={claim.name} />
       <div className="min-w-0">
         <h2 className="font-semibold leading-snug">{claim.name}</h2>
-        <p className="text-sm text-black/60">{claim.address}</p>
-        <p className="text-sm text-black/60">
+        <p className="text-sm text-navy-950/60">{claim.address}</p>
+        <p className="text-sm text-navy-950/60">
           {claim.district} · {claim.region}
         </p>
       </div>
@@ -52,9 +52,9 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
   if (claim.already_used) {
     return (
       <main className="space-y-4">
-        <h1 className="text-xl font-semibold">This venue has already been claimed</h1>
+        <h1 className="text-2xl font-bold leading-tight">This venue has already been claimed</h1>
         {venueCard}
-        <Link href="/owner/login" className="inline-block text-sm font-medium text-emerald-700 underline">
+        <Link href="/owner/login" className="inline-block text-sm font-medium text-navy-700 underline">
           Log in to manage it
         </Link>
       </main>
@@ -70,8 +70,8 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
     return (
       <main className="space-y-5">
         <div>
-          <h1 className="text-xl font-semibold">Claim your venue</h1>
-          <p className="mt-1 text-sm text-black/70">
+          <h1 className="text-2xl font-bold leading-tight">Claim your venue</h1>
+          <p className="mt-1 text-sm text-navy-950/70">
             Your venue is listed on Pickleball Slots HK. Claim it to manage your listing and post
             discounted slots to fill empty court time.
           </p>
@@ -80,13 +80,13 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
         <div className="space-y-2">
           <Link
             href={`/owner/signup?next=${encodeURIComponent(next)}`}
-            className="block w-full rounded-lg bg-emerald-700 px-4 py-3 text-center font-medium text-white"
+            className="block w-full rounded-lg bg-navy-900 px-4 py-3 text-center font-medium text-white"
           >
             Create an account to claim
           </Link>
           <Link
             href={`/owner/login?next=${encodeURIComponent(next)}`}
-            className="block w-full rounded-lg border border-black/15 px-4 py-3 text-center font-medium"
+            className="block w-full rounded-lg border border-navy-900/15 px-4 py-3 text-center font-medium"
           >
             I already have an account
           </Link>
@@ -104,8 +104,8 @@ export default async function ClaimPage({ params }: { params: Promise<{ token: s
   return (
     <main className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold">Claim your venue</h1>
-        <p className="mt-1 text-sm text-black/70">Logged in as {user.email}</p>
+        <h1 className="text-2xl font-bold leading-tight">Claim your venue</h1>
+        <p className="mt-1 text-sm text-navy-950/70">Logged in as {user.email}</p>
       </div>
       {venueCard}
       <ClaimForm

@@ -10,7 +10,7 @@ export function PaymentButtons({ venueId, bookingId, code, reported }: { venueId
   const [blocked, setBlocked] = useState(false);
   return (
     <div className="mt-2 space-y-2 rounded-lg bg-white/70 p-2">
-      <p className="text-xs text-black/70">
+      <p className="text-xs text-navy-950/70">
         {reported ? "The player says they've paid." : "Waiting for the player to pay."} Check your FPS / PayMe for reference{" "}
         <b className="font-mono">{code}</b>.
       </p>
@@ -23,7 +23,7 @@ export function PaymentButtons({ venueId, bookingId, code, reported }: { venueId
             name="court_blocked"
             checked={blocked}
             onChange={(e) => setBlocked(e.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 accent-emerald-700"
+            className="mt-0.5 h-4 w-4 shrink-0 accent-navy-900"
           />
           I&apos;ve blocked this court and time in my own booking system
         </label>
@@ -32,7 +32,7 @@ export function PaymentButtons({ venueId, bookingId, code, reported }: { venueId
         <button
           form={`ok-${bookingId}`}
           disabled={okPending || noPending || !blocked}
-          className="w-full rounded-lg bg-emerald-700 px-2 py-2 text-sm font-medium text-white disabled:opacity-40"
+          className="w-full rounded-lg bg-navy-900 px-2 py-2 text-sm font-medium text-white disabled:opacity-40"
         >
           {okPending ? "…" : "Payment received"}
         </button>
@@ -44,7 +44,7 @@ export function PaymentButtons({ venueId, bookingId, code, reported }: { venueId
         >
           <input type="hidden" name="venue_id" value={venueId} />
           <input type="hidden" name="booking_id" value={bookingId} />
-          <button disabled={okPending || noPending} className="w-full rounded-lg border border-black/15 bg-white px-2 py-2 text-sm font-medium text-red-700 disabled:opacity-50">
+          <button disabled={okPending || noPending} className="w-full rounded-lg border border-navy-900/15 bg-white px-2 py-2 text-sm font-medium text-red-700 disabled:opacity-50">
             {noPending ? "…" : "Not received"}
           </button>
         </form>

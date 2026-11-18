@@ -13,19 +13,19 @@ export const metadata: Metadata = { title: "Set up your venue | Pickleball Slots
 
 function Step({ n, title, done, children, open }: { n: number; title: string; done: boolean; children: React.ReactNode; open: boolean }) {
   return (
-    <details open={open} className="group rounded-2xl border border-black/10 bg-white">
+    <details open={open} className="group rounded-2xl border border-navy-900/10 bg-white">
       <summary className="flex cursor-pointer list-none items-center gap-3 p-4">
         <span
           className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${
-            done ? "bg-emerald-700 text-white" : "border-2 border-black/20 text-black/60"
+            done ? "bg-emerald-700 text-white" : "border-2 border-navy-900/20 text-navy-950/60"
           }`}
         >
           {done ? "✓" : n}
         </span>
         <span className="flex-1 font-semibold">{title}</span>
-        <span className="text-black/40 transition group-open:rotate-180">⌄</span>
+        <span className="text-navy-950/40 transition group-open:rotate-180">⌄</span>
       </summary>
-      <div className="border-t border-black/10 p-4">{children}</div>
+      <div className="border-t border-navy-900/10 p-4">{children}</div>
     </details>
   );
 }
@@ -69,8 +69,8 @@ export default async function SetupPage({
       <div className="flex items-center gap-3">
         <VenueBadge name={venue.name} size={44} />
         <div className="min-w-0">
-          <Link href="/owner" className="text-xs text-emerald-700">← My venue</Link>
-          <h1 className="truncate text-lg font-semibold leading-tight">Set up {venue.name}</h1>
+          <Link href="/owner" className="text-xs text-navy-700">← My venue</Link>
+          <h1 className="truncate font-sans text-lg font-semibold normal-case leading-tight">Set up {venue.name}</h1>
         </div>
       </div>
 
@@ -88,7 +88,7 @@ export default async function SetupPage({
         <CourtsSetup venueId={id} courts={courts ?? []} />
       </Step>
       <Step n={3} title="Your original prices" done={pricesDone} open={firstOpen === 3}>
-        <p className="mb-3 text-sm text-black/60">
+        <p className="mb-3 text-sm text-navy-950/60">
           Enter your normal court prices for each day and time. When you post a slot, its original price is filled in
           from this list, and the discount is taken off.
         </p>
@@ -102,7 +102,7 @@ export default async function SetupPage({
       <Link
         href={`/owner/venue/${id}`}
         className={`block rounded-lg px-4 py-3 text-center font-medium ${
-          allDone ? "bg-emerald-700 text-white" : "border border-black/15 bg-white text-black/70"
+          allDone ? "bg-navy-900 text-white" : "border border-navy-900/15 bg-white text-navy-950/70"
         }`}
       >
         {allDone ? "Post slots →" : "Skip for now → Manage slots"}
